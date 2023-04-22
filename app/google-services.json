@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "128376081819",
+    "project_id": "mascota002-3b966",
+    "storage_bucket": "mascota002-3b966.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128376081819:android:993693c00cdb40671b653e",
+        "android_client_info": {
+          "package_name": "com.example.veterinaria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128376081819-r63su3j7mbmsv1d9gb39ca0mtaertkp4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKvhOADRrKhhyH62nUnZ0yM5nqIV1xmwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128376081819-r63su3j7mbmsv1d9gb39ca0mtaertkp4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
