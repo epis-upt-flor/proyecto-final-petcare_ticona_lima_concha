@@ -28,8 +28,9 @@ import coil.compose.AsyncImage
 
 @Composable
 fun InformacionVeterinariaScreen() {
+    val veterinarias = listOf(Veterinaria.LocalPrincipal, Veterinaria.Sucursal1, Veterinaria.Sucursal2)
     Column {
-        LocalesVeterinaria()
+        LocalesVeterinaria(veterinarias)
         MapaVeterinarias()
     }
 }
@@ -58,8 +59,7 @@ fun MapaVeterinarias() {
 }
 
 @Composable
-fun LocalesVeterinaria() {
-    val veterinarias = listOf(Veterinaria.LocalPrincipal, Veterinaria.Sucursal1, Veterinaria.Sucursal2)
+fun LocalesVeterinaria(veterinarias: List<Veterinaria>) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
