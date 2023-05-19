@@ -121,6 +121,7 @@ fun DrawerContent(scope: CoroutineScope, scaffoldState: ScaffoldState, navContro
         InformacionUsuarioCard("Pedro", "pedro@gmail.com", "https://xsgames.co/randomusers/assets/images/favicon.png")
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CitasScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MisMascotasScreen)
+        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Emergencia)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MapaVeterinariaScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CerrarSesion)
     }

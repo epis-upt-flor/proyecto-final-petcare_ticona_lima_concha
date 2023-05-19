@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.veterinaria.pet.PetRegisterScreen
 import com.example.veterinaria.pet.PetScreen
+import com.example.veterinaria.screens.emergencia.EmergenciaMapScreen
+import com.example.veterinaria.screens.emergencia.EmergenciaScreen
 import com.example.veterinaria.screens.home.HomeScreen
 import com.example.veterinaria.screens.home.InformacionVeterinariaScreen
 
@@ -26,6 +28,7 @@ sealed class OpcionMenuSuperior(val icono: ImageVector, val titulo: String, val 
     object CitasScreen: OpcionMenuSuperior(Icons.Default.CalendarMonth, "Citas", "citas")
     object MisMascotasScreen: OpcionMenuSuperior(Icons.Default.Pets, "Mis Mascotas", "mis-mascotas")
     object CerrarSesion: OpcionMenuSuperior(Icons.Default.Close, "Cerrar Sesion", "cerrar-sesion")
+    object Emergencia : OpcionMenuSuperior(Icons.Default.Warning, "Emergencia", "emergencia")
 }
 @ExperimentalMaterialApi
 @Composable
@@ -36,10 +39,13 @@ fun NavegacionUsuario(navController: NavHostController) {
             InformacionVeterinariaScreen()
         }
         composable(route=OpcionMenuSuperior.CitasScreen.ruta){
-            //Todo CitasScreen
-
-
             navegationDiary()
+        }
+        composable(route=OpcionMenuSuperior.Emergencia.ruta){
+            EmergenciaScreen(navController)
+        }
+        composable(route=PetRoutes.EmergenciaMapRoute.name){
+            EmergenciaMapScreen()
         }
         composable(route=OpcionMenuSuperior.CerrarSesion.ruta){
             //Todo Cerrar Sesion
@@ -71,5 +77,6 @@ fun NavegacionUsuario(navController: NavHostController) {
 
 enum class PetRoutes {
     RegisterScreenRoute,
-    ListPetScreenRoute
+    ListPetScreenRoute,
+    EmergenciaMapRoute
 }
