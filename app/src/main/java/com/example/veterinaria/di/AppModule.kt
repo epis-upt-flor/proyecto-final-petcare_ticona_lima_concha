@@ -1,10 +1,12 @@
 package com.example.veterinaria.di
 
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -16,7 +18,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providerDiaryList(
+    @Named("vetCollection")
+    fun provideVetCollection(
         firestore: FirebaseFirestore
-    )= firestore.collection("diarys")
+    ): CollectionReference = firestore.collection("vet")
+
+    @Provides
+    @Singleton
+    @Named("diaryList")
+    fun provideDiaryList(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("diarys")
+
+
+
 }

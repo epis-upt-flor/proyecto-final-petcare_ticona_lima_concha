@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,8 @@ import com.example.veterinaria.screens.emergencia.EmergenciaMapScreen
 import com.example.veterinaria.screens.emergencia.EmergenciaScreen
 import com.example.veterinaria.screens.home.HomeScreen
 import com.example.veterinaria.screens.home.InformacionVeterinariaScreen
+import com.example.veterinaria.screens.vet.VetDetailViewModel
+import com.example.veterinaria.screens.vet.vetScreen
 
 sealed class OpcionMenuInferior(val icono: ImageVector, val titulo: String, val ruta: String) {
     object HomeScreen: OpcionMenuInferior(Icons.Default.Home, "Home","master")
@@ -29,6 +32,7 @@ sealed class OpcionMenuSuperior(val icono: ImageVector, val titulo: String, val 
     object MisMascotasScreen: OpcionMenuSuperior(Icons.Default.Pets, "Mis Mascotas", "mis-mascotas")
     object CerrarSesion: OpcionMenuSuperior(Icons.Default.Close, "Cerrar Sesion", "cerrar-sesion")
     object Emergencia : OpcionMenuSuperior(Icons.Default.Warning, "Emergencia", "emergencia")
+    object Veterinaria : OpcionMenuSuperior(Icons.Default.Details, "Vet", "add_vet")
 }
 @ExperimentalMaterialApi
 @Composable
@@ -49,6 +53,15 @@ fun NavegacionUsuario(navController: NavHostController) {
         }
         composable(route=OpcionMenuSuperior.CerrarSesion.ruta){
             //Todo Cerrar Sesion
+        }
+        composable(route=OpcionMenuSuperior.Veterinaria.ruta){
+            val viewModel: VetDetailViewModel = hiltViewModel()
+            val state = viewModel.state.value
+
+            vetScreen(
+                state = state,
+                addNewVet = viewModel::addNewVet
+            )
         }
 
         composable(route=OpcionMenuInferior.MascotaScreen.ruta){
