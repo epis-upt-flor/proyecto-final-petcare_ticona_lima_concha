@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class DiaryRepository
 @Inject
 constructor(
-    private val diaryList: CollectionReference
+    @Named("diaryList") private val diaryList: CollectionReference
 )
 {
     // agregando nuevo documento a nuestra coleccion
