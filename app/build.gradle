@@ -110,4 +110,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
 
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation group: 'com.google.accompanist', name: 'accompanist-pager', version: '0.31.2-alpha'
+    implementation("com.google.accompanist:accompanist-pager:0.31.2-alpha")
+
 }

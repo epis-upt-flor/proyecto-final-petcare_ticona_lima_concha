@@ -3,6 +3,7 @@ package com.example.veterinaria
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.veterinaria.navegation.MascotaNavegation
 import com.example.veterinaria.ui.theme.VeterinariaTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
+
 @ExperimentalMaterialApi
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,7 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun MascotaApp(){
