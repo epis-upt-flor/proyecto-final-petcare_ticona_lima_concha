@@ -1,5 +1,6 @@
 package com.example.veterinaria.navegation
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -34,6 +35,7 @@ sealed class OpcionMenuSuperior(val icono: ImageVector, val titulo: String, val 
     object Emergencia : OpcionMenuSuperior(Icons.Default.Warning, "Emergencia", "emergencia")
     object Veterinaria : OpcionMenuSuperior(Icons.Default.Details, "Vet", "add_vet")
 }
+@OptIn(ExperimentalLayoutApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun NavegacionUsuario(navController: NavHostController) {
@@ -68,7 +70,7 @@ fun NavegacionUsuario(navController: NavHostController) {
             //Todo MostrarScreen
         }
         composable(OpcionMenuInferior.HomeScreen.ruta) {
-            HomeScreen(navController)
+            HomeScreen()
         }
         composable(route = OpcionMenuInferior.MascotaDetalleScreen.ruta + "/{id}", arguments = listOf(navArgument("id"){
             type = NavType.StringType
