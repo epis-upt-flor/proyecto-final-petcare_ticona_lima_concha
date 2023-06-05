@@ -25,12 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import com.example.veterinaria.screens.emergencia.DetallesUbicacion
+import com.google.maps.android.ktx.utils.sphericalDistance
+import kotlin.math.roundToInt
 
 @Composable
 fun InformacionVeterinariaScreen() {
     val veterinarias = listOf(Veterinaria.LocalPrincipal, Veterinaria.Sucursal1, Veterinaria.Sucursal2)
     Column {
-        LocalesVeterinaria(veterinarias)
+        LocalesVeterinaria(veterinarias, null)
         MapaVeterinarias()
     }
 }
@@ -59,21 +62,21 @@ fun MapaVeterinarias() {
 }
 
 @Composable
-fun LocalesVeterinaria(veterinarias: List<Veterinaria>) {
+fun LocalesVeterinaria(veterinarias: List<Veterinaria>, ubicacionActual: DetallesUbicacion?) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         items(
             items = veterinarias,
             itemContent = {
-                VeterinariaListItem(veterinaria = it)
+                VeterinariaListItem(veterinaria = it, ubicacionActual)
             })
     }
 }
 
 
 @Composable
-fun VeterinariaListItem(veterinaria: Veterinaria) {
+fun VeterinariaListItem(veterinaria: Veterinaria, ubicacionActual: DetallesUbicacion?) {
     Card(
         modifier = Modifier
             .padding(
@@ -90,18 +93,24 @@ fun VeterinariaListItem(veterinaria: Veterinaria) {
                 .fillMaxWidth()
                 .align(Alignment.CenterVertically)
             ) {
-                Text(text = veterinaria.titulo, style = typography.h6)
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = veterinaria.titulo, style = typography.h6)
                     Text(text = veterinaria.telefono, style = typography.caption, color = Color.Green)
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = veterinaria.direccion,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
                     style = typography.caption
                 )
+                ubicacionActual?.let{
+                    var miUbicacion = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
+                    var distanciaEsferica = miUbicacion.sphericalDistance(veterinaria.ubicacion)
+                    var distanciaEsfericaRedondeada = (distanciaEsferica * 100.0).roundToInt() / 100.0
+                    Text(text = "Distancia: $distanciaEsfericaRedondeada m")
+                }
             }
         }
     }

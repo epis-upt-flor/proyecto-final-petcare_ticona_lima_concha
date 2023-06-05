@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,6 +28,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,6 +37,7 @@ import coil.compose.AsyncImage
 import com.example.veterinaria.navegation.NavegacionUsuario
 import com.example.veterinaria.navegation.OpcionMenuSuperior
 import com.example.veterinaria.navegation.OpcionMenuInferior
+import com.example.veterinaria.screens.emergencia.UbicacionLiveData
 import com.example.veterinaria.ui.theme.Purple500
 import com.example.veterinaria.ui.theme.VeterinariaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,11 +46,23 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var ubicacionLiveData: UbicacionLiveData
+    private val requestSinglePermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { estaPermisoConcedido ->
+        if(estaPermisoConcedido == true) {
+            ubicacionLiveData.startLocationUpdates()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.ubicacionLiveData = UbicacionLiveData(baseContext)
+
         setContent {
             VeterinariaTheme {
-                PrincipalScreen()
+                PrincipalScreen(ubicacionLiveData, requestSinglePermissionLauncher)
             }
         }
     }
@@ -54,7 +71,10 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun PrincipalScreen() {
+fun PrincipalScreen(
+    ubicacionLiveData: UbicacionLiveData,
+    requestSinglePermissionLauncher: ActivityResultLauncher<String>
+) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val navItemsList = listOf(OpcionMenuInferior.HomeScreen, OpcionMenuInferior.MascotaScreen, OpcionMenuInferior.MascotaDetalleScreen)
@@ -68,7 +88,7 @@ fun PrincipalScreen() {
         topBar = { MenuNavegacionSuperior(scope, scaffoldState) },
         bottomBar = { BarraNavegacionInferior( navController, navItemsList )}
     ) {
-        NavegacionUsuario(navController)
+        NavegacionUsuario(navController, ubicacionLiveData, requestSinglePermissionLauncher)
     }
 }
 
@@ -119,15 +139,33 @@ fun DrawerContent(scope: CoroutineScope, scaffoldState: ScaffoldState, navContro
             .fillMaxWidth(),
     ) {
         InformacionUsuarioCard("Pedro", "pedro@gmail.com", "https://xsgames.co/randomusers/assets/images/favicon.png")
+        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Home)
+        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MisNotificaciones)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CitasScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MisMascotasScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Emergencia)
-        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Veterinaria)
+        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Telemedicina)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MapaVeterinariaScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CerrarSesion)
+        ZonaRedesSociales()
     }
 }
 
+@Composable
+fun ZonaRedesSociales() {
+    Row(modifier = Modifier.padding(8.dp) ,verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            modifier = Modifier.size(50.dp),
+            painter = painterResource(id = R.mipmap.ic_facebook_foreground),
+            contentDescription = "facebook icon"
+        )
+        Image(
+            modifier = Modifier.size(40.dp),
+            painter = painterResource(id = R.mipmap.ic_whatsapp_foreground),
+            contentDescription = "whatsapp icon"
+        )
+    }
+}
 
 @Composable
 fun OpcionSuperior(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavHostController, opcionMenuSuperior: OpcionMenuSuperior) {

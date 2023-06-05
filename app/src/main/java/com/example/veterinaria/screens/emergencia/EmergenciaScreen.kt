@@ -22,7 +22,7 @@ fun EmergenciaScreen(navController: NavHostController) {
         Button(
             modifier = Modifier.fillMaxWidth()
             ,onClick = {
-                navController.navigate(PetRoutes.EmergenciaMapRoute.name)
+                navController.navigate(PetRoutes.EmergenciaMapRoute.name + "/0")
             }) {
             Text(
                 text = "Atropello por auto",
@@ -31,7 +31,7 @@ fun EmergenciaScreen(navController: NavHostController) {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                navController.navigate(PetRoutes.EmergenciaMapRoute.name)
+                navController.navigate(PetRoutes.EmergenciaMapRoute.name + "/1")
             }) {
             Text(
                 text = "Problemas de parto",
@@ -40,7 +40,7 @@ fun EmergenciaScreen(navController: NavHostController) {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                navController.navigate(PetRoutes.EmergenciaMapRoute.name)
+                navController.navigate(PetRoutes.EmergenciaMapRoute.name + "/2")
             }) {
             Text(
                 text = "Intoxicación",
@@ -49,7 +49,7 @@ fun EmergenciaScreen(navController: NavHostController) {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                navController.navigate(PetRoutes.EmergenciaMapRoute.name)
+                navController.navigate(PetRoutes.EmergenciaMapRoute.name + "/3")
             }) {
             Text(
                 text = "Convulsiones",
