@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.example.veterinaria.screens.img.Image_Screen
 
 @Composable
 fun vetScreen(
@@ -155,7 +156,7 @@ fun vetScreen(
             .fillMaxSize(), contentAlignment = Alignment.Center
 
     ) {
-        MyAppImg()
+        Image_Screen()
     }
 
 
