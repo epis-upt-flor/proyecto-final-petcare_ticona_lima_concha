@@ -144,7 +144,7 @@ fun DrawerContent(scope: CoroutineScope, scaffoldState: ScaffoldState, navContro
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CitasScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MisMascotasScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Emergencia)
-        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Telemedicina)
+        OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Veterinaria)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MapaVeterinariaScreen)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CerrarSesion)
         ZonaRedesSociales()
