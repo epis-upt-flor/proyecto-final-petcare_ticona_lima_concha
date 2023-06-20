@@ -1,7 +1,7 @@
 package com.example.veterinaria.di
 
-import com.example.veterinaria.screens.img.data.ImageRepositoryImpl
-import com.example.veterinaria.screens.img.repository.ImageRepository
+import com.example.veterinaria.data.repository.ImageRepository
+import com.example.veterinaria.data.repository.ImageRepositoryImpl
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -17,9 +17,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides
     @Singleton
     fun provideFirestoreInstance() = FirebaseFirestore.getInstance()
+
+    @Provides
+    fun provideFirebaseStorage()= Firebase.storage
 
     @Provides
     @Singleton
@@ -30,16 +34,31 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("userCollection")
+    fun provideUserCollection(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("users")
+
+    @Provides
+    @Singleton
+    @Named("petCollection")
+    fun providePetCollection(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("pet")
+
+    @Provides
+    @Singleton
+    @Named("serviceCollection")
+    fun provideServiceCollection(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("services")
+
+    @Provides
+    @Singleton
     @Named("diaryList")
     fun provideDiaryList(
         firestore: FirebaseFirestore
     ): CollectionReference = firestore.collection("diarys")
-
-    @Provides
-    fun provideFirebaseStorage()= Firebase.storage
-
-    // @Provides
-    //fun provideFirebaseFirestore() = Firebase.firestore
 
     @Provides
     fun provideImaqeRepository(
@@ -49,7 +68,4 @@ object AppModule {
         storage = storage,
         db = db
     )
-
-
-
 }
