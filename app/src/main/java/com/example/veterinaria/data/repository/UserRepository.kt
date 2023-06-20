@@ -14,8 +14,16 @@ import javax.inject.Singleton
 class UserRepository
 @Inject
 constructor(
-    @Named("userCollection") private val userList: CollectionReference
+    @Named("userCollection") private val userList: CollectionReference,
 ) {
+    fun addNewUser(user: User) {
+        try {
+            // Agregar nuevo registro al usuario
+            userList.document(user.userId).set(user)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     fun getUserList(): Flow<Result<List<User>>> = flow {
         try {
             emit(Result.Loading<List<User>>())

@@ -25,10 +25,13 @@ fun UserListScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Text(text = "Id_Actual_: ${userId56}")
+        Text(text = "Id_Actual_: $userId56")
         filteredUserList.forEach { user ->
-            Text(text = "userId: ${user.userId}")
-            Text(text = "email: ${user.email}")
+            Text(text = "UserId: ${user.userId}")
+            Text(text = "Email: ${user.email}")
+            Text(text = "Phone: ${user.phone}")
+            Text(text = "Password: ${user.password}")
+            Text(text = "UserName: ${user.username}")
             val imageUrl = user.photo
             Image(
                 painter = rememberImagePainter(imageUrl),
