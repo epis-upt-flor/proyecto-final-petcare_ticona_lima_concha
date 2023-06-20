@@ -26,6 +26,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,21 +47,33 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.veterinaria.data.model.User
+import com.example.veterinaria.ui.screens.user.UserListState
 import com.example.veterinaria.ui.theme.*
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @ExperimentalLayoutApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    state: UserListState,
+) {
+
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val userId56 = auth.currentUser?.uid
+    val filteredUserList = state.userList.filter { user ->
+        user.userId == userId56
+    }
+
     Box(
         modifier = Modifier
             .background(DeepBlue)
             .fillMaxSize()
     ) {
         Column {
-            GreetingSection()
+            GreetingSection(filteredUserList)
             //ChipSection(chips = listOf("Notificaciones", "Eventos", "Depression"))
             Text(
                 text = "Mis Mascotas",
@@ -107,8 +120,10 @@ fun HomeScreen() {
 
 @Composable
 fun GreetingSection(
-    name: String = "Pedro"
+    //name: String = "Pedro"
+    filteredUserList: List<User>,
 ) {
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -119,10 +134,29 @@ fun GreetingSection(
         Column(
             verticalArrangement = Arrangement.Center
         ) {
+//            Text(
+//                text = "Buen día, $name",
+//                style = MaterialTheme.typography.h2
+//            )
+
+//            filteredUserList.forEach { users ->
+//                users.username
+//            }
+
+//            filteredUserList.forEach { users ->
+//                Text(
+//                    text = "Buen día, ${users.username}",
+//                    style = MaterialTheme.typography.h2
+//                )
+//            }
+            val usernames = filteredUserList.joinToString(", ") { users ->
+                users.username
+            }
             Text(
-                text = "Buen día, $name",
+                text = "Bienvenido $usernames",
                 style = MaterialTheme.typography.h2
             )
+
             Text(
                 text = "¡Deseamos que tengas un buen día!",
                 style = MaterialTheme.typography.body1
@@ -139,7 +173,7 @@ fun GreetingSection(
 
 @Composable
 fun ChipSection(
-    chips: List<String>
+    chips: List<String>,
 ) {
     var selectedChipIndex by remember {
         mutableStateOf(0)
@@ -168,7 +202,7 @@ fun ChipSection(
 
 @Composable
 fun CurrentMeditation(
-    color: Color = LightRed
+    color: Color = LightRed,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -225,7 +259,7 @@ fun FeatureSection(features: List<Feature>) {
 
 @Composable
 fun FeatureItem(
-    feature: Feature
+    feature: Feature,
 ) {
     BoxWithConstraints(
         modifier = Modifier

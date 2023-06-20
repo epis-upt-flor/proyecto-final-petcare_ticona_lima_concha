@@ -68,7 +68,7 @@ fun LoginScreen(
                     )
                 )*/
 
-                Log.d("Credencial","Accediendo xd Screen ${credential}")
+                Log.d("Credencial","Accediendo xd Screen $credential")
             }
         }catch (ex:Exception){
             ex.printStackTrace()
@@ -108,9 +108,11 @@ fun LoginScreen(
                 UserForm(
                     isCreateAccount = true,
                     showPhoto = true
-                ) { email, password,photo ->
+//                ) { email, password,photo ->
+                ) { email, password,phone ->
                     Log.d("Mascota Feliz", "creando cuenta con $email , $password")
-                    viewModel.createUserWithEmailAndPassword(email, password,photo) {
+                    viewModel.createUserWithEmailAndPassword(email, password,phone) {
+//                    viewModel.createUserWithEmailAndPassword(email, password,photo) {
                         //navController.navigate(MascotaScreens.MascotaHomeScreen.name)
                         currentContext.startActivity(
                             Intent(
@@ -171,7 +173,8 @@ fun UserForm(
     isCreateAccount: Boolean = false,
     //onDone: (String, String) -> Unit = { email, pwd -> }
     showPhoto: Boolean = false,
-    onDone: (String, String, String) -> Unit = { email, pwd, photo -> }
+    onDone: (String, String, String) -> Unit = { email, pwd, phone -> }
+//    onDone: (String, String, String) -> Unit = { email, pwd, photo -> }
 ) {
 
     val email = rememberSaveable { mutableStateOf("") }
@@ -183,7 +186,8 @@ fun UserForm(
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     val emailState = rememberSaveable { mutableStateOf("") }
-    val photoState = rememberSaveable { mutableStateOf("") }
+    val phoneState = rememberSaveable { mutableStateOf("") }
+//    val photoState = rememberSaveable { mutableStateOf("") }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         EmailInput(
             emailState = email
@@ -195,9 +199,14 @@ fun UserForm(
         )
         //PhotoInput(photoState)
         if (showPhoto) {
-            PhotoInput(
-                valueState = photoState,
-                labelId = "Photo"
+//            PhotoInput(
+//                valueState = photoState,
+//                labelId = "Photo"
+//            )
+            PhoneInput(
+                valueState = phoneState,
+//                valueState = photoState,
+                labelId = "Phone"
             )
         }
         SubmitButon(
@@ -206,13 +215,22 @@ fun UserForm(
         ) {
             //onDone(email.value.trim(), password.value.trim())
             //onDone(email.value.trim(), password.value.trim())
-            onDone(email.value.trim(), password.value.trim(), photoState.value.trim())
+            onDone(email.value.trim(), password.value.trim(), phoneState.value.trim())
+//            onDone(email.value.trim(), password.value.trim(), photoState.value.trim())
             keyboardController?.hide()
         }
 
     }
 }
+@Composable
+fun PhoneInput(valueState: MutableState<String>, labelId: String= "Phone") {
 
+    InputField(
+        valueState = valueState,
+        labelId = labelId,
+        keyboartType = KeyboardType.Phone
+    )
+}
 @Composable
 fun PhotoInput(valueState: MutableState<String>, labelId: String= "Photo") {
 

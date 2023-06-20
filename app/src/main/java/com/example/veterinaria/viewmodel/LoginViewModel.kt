@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.veterinaria.data.model.User
+import com.example.veterinaria.data.repository.UserRepository
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -57,7 +58,8 @@ class LoginViewModel : ViewModel() {
     fun createUserWithEmailAndPassword(
         email: String,
         password: String,
-        photo: String,
+        phone: String,
+//        photo: String,
         home: () -> Unit,
     ) {
         if (_loading.value == false) {
@@ -69,7 +71,9 @@ class LoginViewModel : ViewModel() {
                         val displayName =
                             task.result.user?.email?.split("@")?.get(0)
 
-                        createUser(displayName,photo,password)
+                        createUser(displayName,phone,password)
+//                        createUser(displayName,photo,password)
+//                        addNewDiary(displayName, photo, password)
                         home()
                     } else {
                         Log.d(
@@ -82,17 +86,30 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private fun createUser(displayName: String?, photo: String?, password: String) {
+//    fun addNewDiary(displayName: String?, photo: String?, password: String) {
+//        val userIds = auth.currentUser?.uid
+//        val user = User(
+//            userId = userIds.toString(),
+//            username = displayName.toString(),
+//            email = "${displayName.toString()}@gmail.com",
+//            phone = "952525911",
+//            password = password,
+//            photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/o/images%2Fuser%2Fuser.png?alt=media&token=c417fd7a-d01e-4777-b095-47572c1a3c6b",
+//        )
+//        //UserRepository.addNewUser(user)
+//    }
+
+    private fun createUser(displayName: String?, phone: String?, password: String) {
         val userIds = auth.currentUser?.uid
         val user = User(
             userId = userIds.toString(),
             username = displayName.toString(),
             email = "${displayName.toString()}@gmail.com",
-            phone = "952525911",
+            phone = "+51 $phone",
             password = password,
             photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/o/images%2Fuser%2Fuser.png?alt=media&token=c417fd7a-d01e-4777-b095-47572c1a3c6b",
 
-        ).toMap()
+            ).toMap()
 
         FirebaseFirestore.getInstance().collection("users")
             .add(user)
@@ -101,5 +118,6 @@ class LoginViewModel : ViewModel() {
             }.addOnFailureListener {
                 Log.d("ClaroPs", "Error: $it")
             }
+
     }
 }

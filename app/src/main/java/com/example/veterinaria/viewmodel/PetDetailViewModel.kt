@@ -32,7 +32,8 @@ constructor(
             age = age,
             species = species,
             breed = listOf(""),
-            gender = "macho",
+            gender = "Macho",
+            photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/o/images%2Fpet%2Fpet_gm.png?alt=media&token=fbb5e816-b03a-4686-80e6-75a94ea79a30",
             ownerId = ownerId
         )
         petRepository.addNewPet(pet)
