@@ -1,6 +1,7 @@
-package com.example.veterinaria.screens.vet
+package com.example.veterinaria.data.repository
 
-import com.example.veterinaria.modelos.Vet
+import com.example.veterinaria.data.model.Veterinary
+import com.example.veterinaria.util.Result
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,29 +16,23 @@ class VetRepository
 constructor(
     @Named("vetCollection") private val vetList: CollectionReference
 ) {
-    // agregando nuevo documento a nuestra coleccion
-    fun addNewVet(vet: Vet) {
+    fun addNewVet(vet: Veterinary) {
         try {
-            //agregando nuevo registro
             vetList.document(vet.id).set(vet)
         } catch (e: Exception){
             e.printStackTrace()
         }
     }
-
-    //emitir resultado
-    fun getVetList() : Flow<Resultados<List<Vet>>> = flow {
+    fun getVetList() : Flow<Result<List<Veterinary>>> = flow {
         try {
-            emit(Resultados.Loading<List<Vet>>())
+            emit(Result.Loading<List<Veterinary>>())
 
             val vetList = vetList.get().await().map{ document ->
-                document.toObject(Vet::class.java)
+                document.toObject(Veterinary::class.java)
             }
-
-            emit(Resultados.Success<List<Vet>>(data = vetList))
-
+            emit(Result.Success<List<Veterinary>>(data = vetList))
         } catch (e: Exception) {
-            emit(Resultados.Error<List<Vet>>(message = e.localizedMessage ?: "Error Desconocido"))
+            emit(Result.Error<List<Veterinary>>(message = e.localizedMessage ?: "Error Desconocido"))
         }
     }
 }
