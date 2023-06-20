@@ -1,26 +1,16 @@
 package com.example.veterinaria.ui.screens.home
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import com.example.veterinaria.R
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -46,8 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
+import com.example.veterinaria.data.model.Pet
 import com.example.veterinaria.data.model.User
+import com.example.veterinaria.ui.screens.pet.petList.PetListState
 import com.example.veterinaria.ui.screens.user.UserListState
 import com.example.veterinaria.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
@@ -59,12 +52,18 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(
     state: UserListState,
+    statePet: PetListState,
 ) {
 
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val userId56 = auth.currentUser?.uid
+
     val filteredUserList = state.userList.filter { user ->
         user.userId == userId56
+    }
+
+    val filteredPetList = statePet.pets.filter { pet ->
+        pet.ownerId == userId56
     }
 
     Box(
@@ -80,7 +79,7 @@ fun HomeScreen(
                 style = MaterialTheme.typography.h1,
                 modifier = Modifier.padding(15.dp)
             )
-            CurrentMeditation()
+            CurrentMeditation(filteredPetList)
             FeatureSection(
                 features = listOf(
                     Feature(
@@ -202,7 +201,8 @@ fun ChipSection(
 
 @Composable
 fun CurrentMeditation(
-    color: Color = LightRed,
+    //color: Color = LightRed,
+    filteredPetList: List<Pet>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -210,29 +210,64 @@ fun CurrentMeditation(
         modifier = Modifier
             .padding(15.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(color)
+            .background(LightRed)
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
     ) {
+        filteredPetList.forEach { pet ->
+            Box(
+                //contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(ButtonBlue)
+                    .padding(10.dp)
+            ) {
+                val imageUrl = pet.photo
+                Image(
+                    painter = rememberImagePainter(imageUrl),
+                    contentDescription = "Mascota seleccionada"
+                )
+            }
 
-        Box(
-            //contentAlignment = Alignment.Center,
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(ButtonBlue)
-                .padding(10.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
-            )
         }
-
     }
+
+    /*
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(15.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color)
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+                .fillMaxWidth()
+        ) {
+
+            Box(
+                //contentAlignment = Alignment.Center,
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(ButtonBlue)
+                    .padding(10.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_play),
+                    contentDescription = "Play",
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+
+        }
+     */
+
+
 }
 
 

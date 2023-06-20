@@ -70,7 +70,11 @@ fun NavegacionUsuario(
         composable(route= OpcionMenuSuperior.Home.ruta){
             val viewModel: UserListViewModel = hiltViewModel()
             val state = viewModel.state.value
-            HomeScreen(state)
+
+            val viewModelPets: PetListViewModel = hiltViewModel()
+            val statePets = viewModelPets.state.value
+
+            HomeScreen(state,statePets)
 //            HomeScreen()
         }
         composable(route= OpcionMenuSuperior.MisNotificaciones.ruta){
@@ -124,7 +128,12 @@ fun NavegacionUsuario(
 
             val viewModel: UserListViewModel = hiltViewModel()
             val state = viewModel.state.value
-            HomeScreen(state)
+
+            val viewModelPets: PetListViewModel = hiltViewModel()
+            val statePets = viewModelPets.state.value
+
+            HomeScreen(state,statePets)
+//            HomeScreen(state)
 //            HomeScreen()
         }
 
