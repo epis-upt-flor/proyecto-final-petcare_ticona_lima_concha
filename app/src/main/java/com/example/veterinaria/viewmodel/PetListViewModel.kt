@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.veterinaria.data.repository.PetRepository
 import com.example.veterinaria.ui.screens.pet.petList.PetListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -23,11 +25,15 @@ constructor(
     private val _state: MutableState<PetListState> = mutableStateOf(PetListState())
     val state: State<PetListState> = _state
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
+
     init {
         getPetList()
     }
 
-    fun getPetList() {
+     fun getPetList() {
         petRepository.getPetList().onEach { result ->
             when (result) {
                 is com.example.veterinaria.util.Result.Error -> {

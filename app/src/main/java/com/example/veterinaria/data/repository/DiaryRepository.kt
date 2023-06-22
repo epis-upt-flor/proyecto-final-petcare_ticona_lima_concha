@@ -59,9 +59,7 @@ constructor(
                 "hour" to diary.hour,
                 "service" to diary.service,
             )
-
             diaryList.document(diaryId).update(map)
-
         } catch (e: Exception) {
             e.printStackTrace()
         }

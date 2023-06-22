@@ -11,7 +11,7 @@ sealed class DestinationPet(
     object PetDetail : DestinationDiary(
         route = "petDetail",
         arguments =listOf(
-            navArgument("diaryId"){
+            navArgument("petId"){
                 nullable = true
             }
         )

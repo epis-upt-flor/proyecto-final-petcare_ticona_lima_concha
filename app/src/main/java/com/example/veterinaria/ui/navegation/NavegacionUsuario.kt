@@ -15,7 +15,6 @@ import com.example.veterinaria.ui.screens.emergencia.EmergenciaMapScreen
 import com.example.veterinaria.ui.screens.emergencia.EmergenciaScreen
 import com.example.veterinaria.ui.screens.emergencia.UbicacionLiveData
 import com.example.veterinaria.ui.screens.home.HomeScreen
-import com.example.veterinaria.ui.screens.home.InformacionVeterinariaScreen
 import com.example.veterinaria.ui.screens.pet.petDetail.PetDetailScreen
 import com.example.veterinaria.ui.screens.pet.petList.PetListScreen
 import com.example.veterinaria.ui.screens.user.UserListScreen
@@ -78,17 +77,21 @@ fun NavegacionUsuario(
 //            HomeScreen()
         }
         composable(route= OpcionMenuSuperior.MisNotificaciones.ruta){
-            val viewModel: PetListViewModel = hiltViewModel()
+            /*val viewModel: PetListViewModel = hiltViewModel()
             val state = viewModel.state.value
-            PetListScreen(state)
+            PetListScreen(state)*/
+
+            NavegationPet()
         }
         composable(route= OpcionMenuSuperior.MisMascotasScreen.ruta){
-            val viewModel: PetDetailViewModel = hiltViewModel()
+            /*val viewModel: PetDetailViewModel = hiltViewModel()
             val state = viewModel.state.value
             PetDetailScreen(
                 state = state,
                 addNewPet = viewModel::addNewPet,
-            )
+            )*/
+
+            NavegationPet()
         }
 
         composable(route = OpcionMenuSuperior.CitasScreen.ruta) {
@@ -120,9 +123,10 @@ fun NavegacionUsuario(
             /*val viewModel: VetListViewModel = hiltViewModel()
             val state = viewModel.state.value
             vetMap(state)*/
-            val viewModel: PetListViewModel = hiltViewModel()
+            /*val viewModel: PetListViewModel = hiltViewModel()
             val state = viewModel.state.value
-            PetListScreen(state)
+            PetListScreen(state)*/
+            NavegationPet()
         }
         composable(OpcionMenuInferior.HomeScreen.ruta) {
 
