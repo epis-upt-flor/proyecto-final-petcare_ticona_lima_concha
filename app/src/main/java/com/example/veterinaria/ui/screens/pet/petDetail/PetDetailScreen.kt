@@ -17,6 +17,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -39,14 +40,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.google.firebase.auth.FirebaseAuth
-
+import kotlin.reflect.KFunction
+import kotlin.reflect.KFunction6
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun PetDetailScreen(
     state: PetDetailState,
-    addNewPet: (String, Int, List<String>, String) -> String,
-//    addNewPet: (String, String, Int, List<String>, List<String>, String, String, String) -> Unit,
+
+    //addNewPet: KFunction7<String, Int, String, String, String, String, String>,
+    addNewPet: (String, Int,String,String, String, String, String) -> Unit,
+    updatePets: (String,Int,String,String,String,String) -> Unit
+//    addNewPet: (String, Int,String,String, String, String, String) -> Unit,
 //    addNewPet: KFunction4<String, Int, List<String>, String, Unit>,
 //    state3: UserDetailState,
 //    updateUserPets: KFunction1<List<String>, Unit>
@@ -55,12 +60,27 @@ fun PetDetailScreen(
 ) {
     var nombre by remember(state.pet?.name) { mutableStateOf(state.pet?.name ?: "") }
     var age by remember(state.pet?.age) { mutableStateOf(state.pet?.age ?: 0) }
-    var species by remember { mutableStateOf(state.pet?.species ?: emptyList()) }
-
-    var breed by remember(state.pet?.breed) { mutableStateOf(state.pet?.breed ?: emptyList()) }
+    //var species by remember { mutableStateOf(state.pet?.species ?: emptyList()) }
+    //var breed by remember(state.pet?.breed) { mutableStateOf(state.pet?.breed ?: emptyList()) }
+    //var species by remember(state.pet?.species) { mutableStateOf(state.pet?.species ?: "") }
+    var breed by remember(state.pet?.breed) { mutableStateOf(state.pet?.breed ?: "") }
     var gender by remember(state.pet?.gender) { mutableStateOf(state.pet?.gender ?: "") }
     var photo by remember(state.pet?.photo) { mutableStateOf(state.pet?.photo ?: "") }
-    var ownerId by remember(state.pet?.ownerId) { mutableStateOf(state.pet?.ownerId ?: "") }
+
+    // Definir una lista de especies de animales para el DropdownMenu
+    val speciesOptions = listOf("Perro", "Gato", "Ave", "Otro")
+    var species by remember(state.pet?.species) { mutableStateOf(state.pet?.species ?: "") }
+
+    var expanded by remember { mutableStateOf(false) } // Estado para controlar si el menú está expandido
+
+    // Método para manejar la selección de una especie
+    val onSpeciesSelected: (String) -> Unit = { selectedSpecies ->
+        species = selectedSpecies
+        expanded = false
+    }
+    val breedOptions = listOf("Opción 1", "Opción 2", "Opción 3")
+    val genderOptions = listOf("Masculino", "Femenino", "Otro")
+
 
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val userId = auth.currentUser?.uid
@@ -96,9 +116,48 @@ fun PetDetailScreen(
                     keyboardType = KeyboardType.Number
                 )
             )
-            dropDownMenu(species) { selectedSpecies ->
-                species = selectedSpecies
+
+            OutlinedButton(
+                onClick = { expanded = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(text = if (species.isNotEmpty()) species else "Seleccionar especie")
             }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                speciesOptions.forEach { option ->
+                    DropdownMenuItem(onClick = { onSpeciesSelected(option) }) {
+                        Text(text = option)
+                    }
+                }
+            }
+
+            DropdownComponent(
+                label = "Raza",
+                selectedItem = breed,
+                options = breedOptions,
+                onItemSelected = { selectedBreed ->
+                    breed = selectedBreed
+                }
+            )
+
+            // Dropdown para gender
+            DropdownComponent(
+                label = "Género",
+                selectedItem = gender,
+                options = genderOptions,
+                onItemSelected = { selectedGender ->
+                    gender = selectedGender
+                }
+            )
+            /*dropDownMenu(species) { selectedSpecies ->
+                species = selectedSpecies
+            }*/
         }
         if (state.error.isNotBlank()) {
             Text(
@@ -122,6 +181,10 @@ fun PetDetailScreen(
                         .align(Alignment.BottomCenter),
                     onClick = {
 
+
+                        val photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/" +
+                                "o/images%2Fpet%2Fpet_gm.png?alt=media&token=fbb5e816-b03a-4686-80e6-75a94ea79a30"
+                        updatePets(nombre,age,species,breed,gender,photo)
                     },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.Red
@@ -158,10 +221,15 @@ fun PetDetailScreen(
                                 onClick = {
                                     showDialog = false
 
+                                    val photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/" +
+                                            "o/images%2Fpet%2Fpet_gm.png?alt=media&token=fbb5e816-b03a-4686-80e6-75a94ea79a30"
                                     val petId = addNewPet(
                                         nombre,
                                         age,
                                         species,
+                                        breed,
+                                        gender,
+                                        photo,
                                         userId.toString()
                                     )
                                     Log.d("state1", "Id de pet $petId")
@@ -183,6 +251,41 @@ fun PetDetailScreen(
         }
     }
 }
+
+@Composable
+fun DropdownComponent(
+    label: String,
+    selectedItem: String,
+    options: List<String>,
+    onItemSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    OutlinedButton(
+        onClick = { expanded = true },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+    ) {
+        Text(text = if (selectedItem.isNotEmpty()) selectedItem else "Seleccionar $label")
+    }
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false }
+    ) {
+        options.forEach { option ->
+            DropdownMenuItem(onClick = {
+                onItemSelected(option)
+                expanded = false
+            }) {
+                Text(text = option)
+            }
+        }
+    }
+}
+
+
 
 
 @Composable

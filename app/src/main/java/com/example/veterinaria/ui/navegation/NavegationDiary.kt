@@ -35,7 +35,6 @@ fun NavGraphBuilder.addDiaryList(
     composable(
         route = DestinationDiary.DiaryList.route
     ){
-
         val viewModel: DiaryListViewModel = hiltViewModel()
         val state = viewModel.state.value
         val isRefreshing = viewModel.isRefreshing.collectAsState()
