@@ -41,6 +41,14 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("emergencyCollection")
+    fun provideEmergencyCollection(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("emergency")
+
+
+    @Provides
+    @Singleton
     @Named("petCollection")
     fun providePetCollection(
         firestore: FirebaseFirestore

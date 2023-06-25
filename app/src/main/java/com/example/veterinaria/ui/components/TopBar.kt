@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuNavegacionSuperior(scope: CoroutineScope, scaffoldState: ScaffoldState) {
     TopAppBar(
-        title = { Text("Clinica Veterinaria") },
+        title = { Text("Pet Care Locator") },
         navigationIcon = {
             IconButton(onClick = { scope.launch { scaffoldState.drawerState.open() } }) {
                 Icon(Icons.Filled.Menu, contentDescription = null)

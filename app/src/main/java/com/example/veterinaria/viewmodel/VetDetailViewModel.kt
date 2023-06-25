@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.veterinaria.data.model.Emergency
 import com.example.veterinaria.data.model.Location
 import com.example.veterinaria.data.model.Service
 import com.example.veterinaria.data.model.Veterinary
@@ -26,13 +27,15 @@ constructor(
     val state: State<VetDetailState>
         get() = _state
 
-    fun addNewVet(name: String, phone:String, location: Location, services: List<Service>, logo:String) {
+    fun addNewVet(name: String, phone:String,address:String, location: Location, services: List<Service>, emergency: List<Emergency>,logo:String) {
         val vet = Veterinary(
             id = UUID.randomUUID().toString(),
             name = name,
             phone = phone,
+            address = address,
             location = location,
             services = services,
+            emergency = emergency,
             veterinary_logo = logo
         )
         vetRepository.addNewVet(vet)

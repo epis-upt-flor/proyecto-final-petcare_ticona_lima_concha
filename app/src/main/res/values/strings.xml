@@ -1,4 +1,49 @@
 <resources>
     <string name="app_name">Veterinaria</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <string name="feature_not_available">Feature not available</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="done">Done</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+
+    <!-- survey-->
+    <string name="question_count">\u00A0of %d</string>
+    <string name="select_one">Select one.</string>
+    <string name="select_all">Select all that apply.</string>
+    <string name="select_date">Select date.</string>
+
+    <!-- question 1-->
+    <string name="in_my_free_time">In my free time I like to …</string>
+    <string name="read">Read</string>
+    <string name="work_out">Work out</string>
+    <string name="draw">Draw</string>
+    <string name="play_games">Play video games</string>
+    <string name="dance">Dance</string>
+    <string name="watch_movies">Watch movies</string>
+
+    <!-- question 2 -->
+    <string name="pick_superhero">Pick a Compose comic character</string>
+    <string name="spark">Spark</string>
+    <string name="lenz">Lenz</string>
+    <string name="bugchaos">Bug of Chaos</string>
+    <string name="frag">Frag</string>
+
+    <!-- question 3  -->
+    <string name="takeaway">When was the last time you ordered takeaway because you couldn\'t be bothered to cook?</string>
+
+    <!-- question 4-->
+    <string name="selfies">How do you feel about selfies 🤳?</string>
+
+    <!-- question 5-->
+    <string name="selfie_skills">Show off your selfie skills!</string>
+    <string name="add_photo">ADD PHOTO</string>
+    <string name="retake_photo">RETAKE PHOTO</string>
+
+
 </resources>
