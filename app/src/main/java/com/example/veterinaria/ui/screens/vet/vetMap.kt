@@ -6,8 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
@@ -42,65 +45,84 @@ fun vetMap(
 
     val selectedVet = remember { mutableStateOf<Veterinary?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        GoogleMap(
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(1.dp, 1.dp, 1.dp, 60.dp)
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 1.dp, top = 1.dp, end = 1.dp, bottom = 200.dp),
-            cameraPositionState = cameraPositionState
+                .fillMaxWidth()
+                .background(Color.Green)
+                .weight(0.75f)
         ) {
-            state.vet.forEach { vet ->
-                val location = vet.location
-                val markerState = remember {
-                    mutableStateOf(
-                        MarkerState(
-                            position = LatLng(
-                                location.latitude,
-                                location.longitude
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxSize(),
+                cameraPositionState = cameraPositionState
+            ) {
+                state.vet.forEach { vet ->
+                    val location = vet.location
+                    val markerState = remember {
+                        mutableStateOf(
+                            MarkerState(
+                                position = LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                )
                             )
                         )
-                    )
-                }
-
-                Marker(
-                    state = markerState.value,
-                    title = vet.name,
-                    snippet = vet.phone,
-                    onClick = {
-                        selectedMarker.value = markerState.value
-                        selectedVet.value = state.vet.find { it.name == vet.name }
-                        selectedVet.value = state.vet.find { it.phone == vet.phone }
-                        selectedVet.value = state.vet.find { it.veterinary_logo == vet.veterinary_logo }
-                        selectedVet.value = state.vet.find { it.services == vet.services }
-                        true
                     }
-                )
-            }
-        }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(start = 1.dp, top = 1.dp, end = 1.dp, bottom = 60.dp)
-                .background(Color.Green)
-                .border(2.dp, Color.Black)
-        ) {
-            Text(text = "Informacion")
-            if (selectedVet.value != null) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = "Veterinario seleccionado: ${selectedVet.value!!.name}")
-                    Text(text = "Veterinario seleccionado: ${selectedVet.value!!.phone}")
-                    val imageUrl = selectedVet.value!!.veterinary_logo
-                    Image(
-                        painter = rememberImagePainter(imageUrl),
-                        contentDescription = "Veterinario seleccionado",
-                        modifier = Modifier.size(70.dp).align(Alignment.End)
-                    )
 
-                    val servicesText = selectedVet.value!!.services.joinToString { it.name }
-                    Text(text = "Veterinario seleccionado: $servicesText")
+                    Marker(
+                        state = markerState.value,
+                        title = vet.name,
+                        snippet = vet.phone,
+                        onClick = {
+                            selectedMarker.value = markerState.value
+                            selectedVet.value = state.vet.find { it.name == vet.name }
+                            selectedVet.value = state.vet.find { it.phone == vet.phone }
+                            selectedVet.value =
+                                state.vet.find { it.veterinary_logo == vet.veterinary_logo }
+                            selectedVet.value = state.vet.find { it.services == vet.services }
+                            true
+                        }
+                    )
                 }
             }
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Blue)
+                .weight(0.25f)
+                .height(IntrinsicSize.Min)
+        ) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Informacion")
+                    if (selectedVet.value != null) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = "Nombre de Veterinaria: ${selectedVet.value!!.name}")
+                            Text(text = "Numero: ${selectedVet.value!!.phone}")
+                            val servicesText = selectedVet.value!!.services.joinToString { it.name }
+                            Text(text = "Servicios: $servicesText")
+                        }
+                    }
+                }
+                Box(modifier = Modifier.weight(1f)) {
+                    Image(
+                        painter = rememberImagePainter(selectedVet.value?.veterinary_logo),
+                        contentDescription = "Veterinario seleccionado",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+        }
+
+
     }
-    }
+
+}

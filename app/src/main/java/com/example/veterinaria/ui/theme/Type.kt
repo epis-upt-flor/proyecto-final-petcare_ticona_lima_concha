@@ -31,10 +31,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp
     ),
+
     h2 = TextStyle(
-        color = TextWhite,
-        fontFamily = gothicA1,
-        fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     )
 )

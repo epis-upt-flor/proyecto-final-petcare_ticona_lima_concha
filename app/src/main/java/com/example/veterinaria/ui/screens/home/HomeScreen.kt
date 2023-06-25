@@ -153,7 +153,7 @@ fun GreetingSection(
             }
             Text(
                 text = "Bienvenido $usernames",
-                style = MaterialTheme.typography.h2
+                style = MaterialTheme.typography.body1
             )
 
             Text(

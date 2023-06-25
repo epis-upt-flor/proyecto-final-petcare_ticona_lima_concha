@@ -5,6 +5,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+const val stronglyDeemphasizedAlpha = 0.6f
+const val slightlyDeemphasizedAlpha = 0.87f
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
