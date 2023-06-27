@@ -128,6 +128,10 @@ fun NavegacionUsuario(
             )
         }
 
+        composable(route = "pet") {
+            NavegationPet()
+        }
+
         //-------------------------Bottom Bar-----------------------------------------
 
         composable(route = OpcionMenuInferior.MascotaScreen.ruta) {

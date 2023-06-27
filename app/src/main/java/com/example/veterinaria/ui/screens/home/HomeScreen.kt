@@ -35,11 +35,13 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.veterinaria.data.model.Pet
 import com.example.veterinaria.data.model.User
+import com.example.veterinaria.ui.navegation.DestinationPet
 import com.example.veterinaria.ui.screens.pet.petList.PetListState
 import com.example.veterinaria.ui.screens.user.UserListState
 import com.example.veterinaria.ui.theme.*
@@ -196,6 +198,9 @@ fun ChipSection(
                 Text(text = chips[it], color = TextWhite)
             }
         }
+
+
+
     }
 }
 
@@ -215,7 +220,7 @@ fun CurrentMeditation(
             .fillMaxWidth()
     ) {
         filteredPetList.forEach { pet ->
-            Box(
+            /*Box(
                 //contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
@@ -228,9 +233,49 @@ fun CurrentMeditation(
                     painter = rememberImagePainter(imageUrl),
                     contentDescription = "Mascota seleccionada"
                 )
+            }*/
+
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(ButtonBlue)
+            ) {
+                val imageUrl = pet.photo
+                Image(
+                    painter = rememberImagePainter(imageUrl),
+                    contentDescription = "Mascota seleccionada",
+                    modifier = Modifier.fillMaxSize()
+                )
             }
 
+
         }
+        val navController = rememberNavController()
+        Box(
+            //contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(ButtonBlue)
+                .padding(10.dp).clickable{
+                    /*navController.navigate(
+                        "${DestinationPet.PetDetail.route}/{petId}?petId=<valor_del_id>"
+                    )*/
+
+                   // navController.navigate(DestinationPet.PetList.route)
+                }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_play),
+                contentDescription = "Play",
+                tint = Color.White,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+
+
     }
 
     /*
