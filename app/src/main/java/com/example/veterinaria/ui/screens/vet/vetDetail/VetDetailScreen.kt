@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.SwapHoriz
@@ -56,6 +58,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -69,6 +72,7 @@ import com.example.veterinaria.data.model.RequestDetailState
 import com.example.veterinaria.data.model.Service
 import com.example.veterinaria.ui.components.ProgressBar
 import com.example.veterinaria.ui.screens.emergencia.UbicacionLiveData
+import com.example.veterinaria.ui.theme.DeepBlue
 import com.example.veterinaria.util.Constants
 import com.example.veterinaria.util.Response
 import com.example.veterinaria.viewmodel.EmergencyListViewModel
@@ -135,7 +139,9 @@ fun vetScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(1.dp, 1.dp, 1.dp, 60.dp),
+            .padding(0.dp, 0.dp, 0.dp, 55.dp)
+            .background(DeepBlue),
+
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -149,12 +155,13 @@ fun vetScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                //.padding(horizontal = 16.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp),
+                    //.padding(horizontal = 16.dp)
+                ,
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -162,11 +169,126 @@ fun vetScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 when (currentScreen) {
                     SurveyScreenState.SCREEN1 -> {
-                        Text("Screen 1 Content")
+
+                        Column(
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .fillMaxSize()
+                                    .background(DeepBlue)
+                                    .weight(0.25f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 40.dp)
+                                        .padding(top = 20.dp),
+                                    text = "Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.",
+                                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+
+
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .background(DeepBlue)
+                                .weight(0.50f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.vetss),
+                                contentDescription = "Imagen de tu veterinaria"
+                            )
+                        }
+
+
+
+                        /*Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(DeepBlue)
+                                .padding(16.dp,16.dp,16.dp,32.dp,)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Completa tus datos correctamente y agrega una foto de tu veterinaria.")
+                        }*/
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp)
+                                    //.padding(top = 20.dp)
+                                         ,
+                                text = "Completa tus datos correctamente y agrega una foto de tu veterinaria.",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+
+
+
                     }
                     SurveyScreenState.SCREEN2 -> {
-                        Column {
-                            Text("Screen 2 Content")
+
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp)
+                                    .padding(top = 20.dp),
+                                text = "Completa los siguientes datos",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.50f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
                             OutlinedTextField(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -177,7 +299,10 @@ fun vetScreen(
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Text
                                 ),
-                                maxLines = 1
+                                maxLines = 1,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    backgroundColor = Color.White // Color de fondo blanco
+                                )
                             )
                             OutlinedTextField(
                                 modifier = Modifier
@@ -189,7 +314,10 @@ fun vetScreen(
                                     Text(text = "Telefono")
                                 },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                maxLines = 1
+                                maxLines = 1,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    backgroundColor = Color.White // Color de fondo blanco
+                                )
                             )
                             OutlinedTextField(
                                 modifier = Modifier
@@ -201,110 +329,241 @@ fun vetScreen(
                                     Text(text = "Direccion")
                                 },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                maxLines = 1
+                                maxLines = 1,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    backgroundColor = Color.White // Color de fondo blanco
+                                )
                             )
                         }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                        }
+
                     }
                     SurveyScreenState.SCREEN3 -> {
-                        Text("Screen 3 Content")
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items(serviceState.services) { service ->
-                                Surface(
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    shape = MaterialTheme.shapes.small,
-                                    border = BorderStroke(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colors.primary,
-                                    )
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
 
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(bottom = 8.dp)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp)
+                                //.padding(top = 20.dp)
+                                ,
+                                text = "Selecciona los servicios de tu Veterinaria.",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.50f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                items(serviceState.services) { service ->
+                                    Surface(
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                        shape = MaterialTheme.shapes.small,
+                                        border = BorderStroke(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colors.primary,
+                                        )
                                     ) {
-                                        Text(
-                                            text = service.name,
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+
                                             modifier = Modifier
-                                                .padding(start = 8.dp)
-                                                .weight(1f),
-                                            style = MaterialTheme.typography.h2
-                                        )
-                                        Checkbox(
-                                            //checked = selectedServices.contains(service.name),
-                                            checked = selectedServices.contains(service),
-                                            onCheckedChange = { isChecked ->
-                                                if (isChecked) {
-                                                    //selectedServices = selectedServices + service.name
-                                                    selectedServices = selectedServices + service
-                                                } else {
-                                                    //selectedServices = selectedServices - service.name
-                                                    selectedServices = selectedServices - service
+                                                .fillMaxWidth()
+                                                .padding(bottom = 8.dp)
+                                        ) {
+                                            Text(
+                                                text = service.name,
+                                                modifier = Modifier
+                                                    .padding(start = 8.dp)
+                                                    .weight(1f),
+                                                style = MaterialTheme.typography.h2
+                                            )
+                                            Checkbox(
+                                                //checked = selectedServices.contains(service.name),
+                                                checked = selectedServices.contains(service),
+                                                onCheckedChange = { isChecked ->
+                                                    if (isChecked) {
+                                                        //selectedServices = selectedServices + service.name
+                                                        selectedServices = selectedServices + service
+                                                    } else {
+                                                        //selectedServices = selectedServices - service.name
+                                                        selectedServices = selectedServices - service
+                                                    }
                                                 }
-                                            }
-                                        )
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.25f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                        }
+
+
                     }
                     SurveyScreenState.SCREEN4 -> {
-                        Text("Screen 4 Content")
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.15f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            items(accidentState.emergency) { emergency ->
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp)
+                                //.padding(top = 20.dp)
+                                ,
+                                text = "Selecciona las emergencias que puedas atender.",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
 
-                                Surface(
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    shape = MaterialTheme.shapes.small,
-                                    border = BorderStroke(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colors.primary,
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.60f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                items(accidentState.emergency) { emergency ->
 
-                                        )
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(bottom = 8.dp)
+                                    Surface(
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                        shape = MaterialTheme.shapes.small,
+                                        border = BorderStroke(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colors.primary,
+
+                                            )
                                     ) {
-                                        Text(
-                                            text = emergency.type,
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
-                                                .padding(start = 8.dp)
-                                                .weight(1f),
-                                            style = MaterialTheme.typography.h2
-                                        )
-                                        Checkbox(
-                                            checked = selectedAccident.contains(emergency),
-                                            onCheckedChange = { isChecked ->
-                                                if (isChecked) {
-                                                    selectedAccident += emergency
-                                                } else {
-                                                    selectedAccident -= emergency
+                                                .fillMaxWidth()
+                                                .padding(bottom = 8.dp)
+                                        ) {
+                                            Text(
+                                                text = emergency.type,
+                                                modifier = Modifier
+                                                    .padding(start = 8.dp)
+                                                    .weight(1f),
+                                                style = MaterialTheme.typography.h2
+                                            )
+                                            Checkbox(
+                                                checked = selectedAccident.contains(emergency),
+                                                onCheckedChange = { isChecked ->
+                                                    if (isChecked) {
+                                                        selectedAccident += emergency
+                                                    } else {
+                                                        selectedAccident -= emergency
+                                                    }
                                                 }
-                                            }
-                                        )
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
+                                .weight(0.15f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                        }
+
+
+
                     }
                     SurveyScreenState.SCREEN5 -> {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                //.background(Color.Green)
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Agrega una Imagen ")
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 40.dp)
+                                //.padding(top = 20.dp)
+                                ,
+                                text = "Agrega una Imagen",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
                         }
                         Column(
                             modifier = Modifier
