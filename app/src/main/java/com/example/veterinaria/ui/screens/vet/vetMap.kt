@@ -4,15 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +33,7 @@ fun vetMap(
     val selectedMarker = remember { mutableStateOf<MarkerState?>(null) }
     val tacna = LatLng(-18.00, -70.24)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(tacna, 16f)
+        position = CameraPosition.fromLatLngZoom(tacna, 12f)
     }
 
     val selectedVet = remember { mutableStateOf<Veterinary?>(null) }
@@ -83,10 +76,6 @@ fun vetMap(
                         onClick = {
                             selectedMarker.value = markerState.value
                             selectedVet.value = state.vet.find { it.name == vet.name }
-                            selectedVet.value = state.vet.find { it.phone == vet.phone }
-                            selectedVet.value =
-                                state.vet.find { it.veterinary_logo == vet.veterinary_logo }
-                            selectedVet.value = state.vet.find { it.services == vet.services }
                             true
                         }
                     )
@@ -96,14 +85,14 @@ fun vetMap(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Blue)
                 .weight(0.25f)
                 .height(IntrinsicSize.Min)
         ) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(text = "Informacion")
-                    if (selectedVet.value != null) {
+            Row(modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center) {
+                if (selectedVet.value != null) {
+                    Card(modifier = Modifier.weight(1f)) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "Nombre de Veterinaria: ${selectedVet.value!!.name}")
                             Text(text = "Numero: ${selectedVet.value!!.phone}")
@@ -111,18 +100,18 @@ fun vetMap(
                             Text(text = "Servicios: $servicesText")
                         }
                     }
+                    Box(modifier = Modifier.weight(1f)) {
+                        Image(
+                            painter = rememberImagePainter(selectedVet.value?.veterinary_logo),
+                            contentDescription = "Veterinario seleccionado",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                } else {
+                    Text(text = "Seleccione una veterinaria en el mapa para obtener información")
                 }
-                Box(modifier = Modifier.weight(1f)) {
-                    Image(
-                        painter = rememberImagePainter(selectedVet.value?.veterinary_logo),
-                        contentDescription = "Veterinario seleccionado",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+
             }
         }
-
-
     }
-
 }

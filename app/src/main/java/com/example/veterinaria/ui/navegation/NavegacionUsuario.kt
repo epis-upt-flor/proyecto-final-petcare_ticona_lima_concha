@@ -100,9 +100,9 @@ fun NavegacionUsuario(
         composable(route = OpcionMenuSuperior.Emergencia.ruta) {
             EmergenciaScreen(navController)
         }
-        composable(route = PetRoutes.EmergenciaMapRoute.name + "/{emergenciaId}") { backStackEntry ->
-            var emergenciaId: String? = backStackEntry.arguments?.getString("emergenciaId")
-            EmergenciaMapScreen(ubicacionLiveData, requestSinglePermissionLauncher, emergenciaId)
+        composable(route = PetRoutes.EmergenciaMapRoute.name + "/{emergenciaNombre}") { backStackEntry ->
+            var emergenciaNombre: String? = backStackEntry.arguments?.getString("emergenciaNombre")
+            EmergenciaMapScreen(ubicacionLiveData, requestSinglePermissionLauncher, emergenciaNombre)
         }
         composable(route = OpcionMenuSuperior.CerrarSesion.ruta) {
             //Todo Cerrar Sesion

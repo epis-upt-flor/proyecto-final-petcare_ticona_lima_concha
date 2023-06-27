@@ -3,14 +3,9 @@ package com.example.veterinaria.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -23,7 +18,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.veterinaria.R
@@ -38,7 +35,7 @@ fun DrawerContent(scope: CoroutineScope, scaffoldState: ScaffoldState, navContro
         Modifier
             .fillMaxWidth(),
     ) {
-        InformacionUsuarioCard("Pedro", "pedro@gmail.com", "https://xsgames.co/randomusers/assets/images/favicon.png")
+        InformacionUsuarioCard("pedro", "pedro@gmail.com", "https://xsgames.co/randomusers/assets/images/favicon.png", scope, scaffoldState)
         OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.Home)
         //OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.MisNotificaciones)
         //OpcionSuperior(scope, scaffoldState, navController, OpcionMenuSuperior.CitasScreen)
@@ -53,9 +50,9 @@ fun DrawerContent(scope: CoroutineScope, scaffoldState: ScaffoldState, navContro
 
 @Composable
 fun ZonaRedesSociales() {
-    Row(modifier = Modifier.padding(8.dp) ,verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = Modifier.fillMaxSize().padding(8.dp), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.SpaceEvenly) {
         Image(
-            modifier = Modifier.size(50.dp),
+            modifier = Modifier.size(40.dp),
             painter = painterResource(id = R.mipmap.ic_facebook_foreground),
             contentDescription = "facebook icon"
         )
@@ -64,12 +61,22 @@ fun ZonaRedesSociales() {
             painter = painterResource(id = R.mipmap.ic_whatsapp_foreground),
             contentDescription = "whatsapp icon"
         )
+        Image(
+            modifier = Modifier.size(40.dp),
+            painter = painterResource(id = R.mipmap.ic_tiktok_foreground),
+            contentDescription = "whatsapp icon"
+        )
+        Image(
+            modifier = Modifier.size(40.dp),
+            painter = painterResource(id = R.mipmap.ic_instagram_foreground),
+            contentDescription = "whatsapp icon"
+        )
     }
 }
 
 
 @Composable
-fun InformacionUsuarioCard(name: String, email: String, photoUrl: String) {
+fun InformacionUsuarioCard(name: String, email: String, photoUrl: String, scope: CoroutineScope, scaffoldState: ScaffoldState) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
@@ -86,6 +93,19 @@ fun InformacionUsuarioCard(name: String, email: String, photoUrl: String) {
         Column {
             Text(text = name)
             Text(text = email)
+        }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Text(
+                text = "X",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .clickable {
+                        scope.launch { scaffoldState.drawerState.close() }
+                    }
+                    .clip(RoundedCornerShape(10.dp))
+                    .padding(vertical = 6.dp, horizontal = 15.dp)
+            )
         }
     }
 }

@@ -25,18 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import com.example.veterinaria.data.model.Veterinary
 import com.example.veterinaria.ui.screens.emergencia.DetallesUbicacion
 import com.google.maps.android.ktx.utils.sphericalDistance
 import kotlin.math.roundToInt
-
-@Composable
-fun InformacionVeterinariaScreen() {
-    val veterinarias = listOf(Veterinaria.LocalPrincipal, Veterinaria.Sucursal1, Veterinaria.Sucursal2)
-    Column {
-        LocalesVeterinaria(veterinarias, null)
-        MapaVeterinarias()
-    }
-}
 
 @Composable
 fun MapaVeterinarias() {
@@ -62,7 +54,7 @@ fun MapaVeterinarias() {
 }
 
 @Composable
-fun LocalesVeterinaria(veterinarias: List<Veterinaria>, ubicacionActual: DetallesUbicacion?) {
+fun LocalesVeterinaria(veterinarias: List<Veterinary>, ubicacionActual: DetallesUbicacion?) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
@@ -76,7 +68,7 @@ fun LocalesVeterinaria(veterinarias: List<Veterinaria>, ubicacionActual: Detalle
 
 
 @Composable
-fun VeterinariaListItem(veterinaria: Veterinaria, ubicacionActual: DetallesUbicacion?) {
+fun VeterinariaListItem(veterinaria: Veterinary, ubicacionActual: DetallesUbicacion?) {
     Card(
         modifier = Modifier
             .padding(
@@ -87,7 +79,7 @@ fun VeterinariaListItem(veterinaria: Veterinaria, ubicacionActual: DetallesUbica
         shape = RoundedCornerShape(corner = CornerSize(16.dp))
     ) {
         Row(Modifier.clickable { }) {
-            VeterinariaImage(veterinaria = veterinaria)
+            VeterinariaImage(veterinaria)
             Column(modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
@@ -95,19 +87,19 @@ fun VeterinariaListItem(veterinaria: Veterinaria, ubicacionActual: DetallesUbica
             ) {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(text = veterinaria.titulo, style = typography.h6)
-                    Text(text = veterinaria.telefono, style = typography.caption, color = Color.Green)
+                    Text(text = veterinaria.name, style = typography.h6)
+                    Text(text = veterinaria.phone, style = typography.caption, color = Color.Green)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = veterinaria.direccion,
+                    text = veterinaria.address,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
                     style = typography.caption
                 )
                 ubicacionActual?.let{
                     var miUbicacion = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
-                    var distanciaEsferica = miUbicacion.sphericalDistance(veterinaria.ubicacion)
+                    var distanciaEsferica = miUbicacion.sphericalDistance(veterinaria.location.toLatLng())
                     var distanciaEsfericaRedondeada = (distanciaEsferica * 100.0).roundToInt() / 100.0
                     Text(text = "Distancia: $distanciaEsfericaRedondeada m")
                 }
@@ -117,8 +109,8 @@ fun VeterinariaListItem(veterinaria: Veterinaria, ubicacionActual: DetallesUbica
 }
 
 @Composable
-private fun VeterinariaImage(veterinaria: Veterinaria){
-    AsyncImage(model = "https://www.shutterstock.com/image-vector/blue-round-veterinary-icon-pets-260nw-320868806.jpg",
+private fun VeterinariaImage(veterinaria: Veterinary){
+    AsyncImage(model = veterinaria.veterinary_logo,
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
