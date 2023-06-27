@@ -101,14 +101,14 @@ fun UserListScreen(
 
                 Column(modifier = Modifier.padding(16.dp)
                     .fillMaxSize()){
-                    Text(
+                    /*Text(
                         text = "UserId:",
                         style = TextStyle(fontWeight = FontWeight.Bold)
                     )
                     Text(
                         text = user.userId,
                         style = TextStyle(fontSize = 18.sp)
-                    )
+                    )*/
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Email:",
@@ -128,14 +128,25 @@ fun UserListScreen(
                         style = TextStyle(fontSize = 18.sp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
+                    /*Text(
                         text = "Password:",
                         style = TextStyle(fontWeight = FontWeight.Bold)
                     )
                     Text(
                         text = user.password,
                         style = TextStyle(fontSize = 18.sp)
+                    )*/
+
+                    Text(
+                        text = "Password:",
+                        style = TextStyle(fontWeight = FontWeight.Bold)
                     )
+                    Text(
+                        text = user.password.replace(Regex("."), "*"),
+                        style = TextStyle(fontSize = 18.sp)
+                    )
+
+
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "UserName:",
