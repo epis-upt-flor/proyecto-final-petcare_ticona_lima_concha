@@ -34,6 +34,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    @Named("requestCollection")
+    fun provideRequestCollection(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection("request")
+
+
+
+    @Provides
+    @Singleton
     @Named("userCollection")
     fun provideUserCollection(
         firestore: FirebaseFirestore

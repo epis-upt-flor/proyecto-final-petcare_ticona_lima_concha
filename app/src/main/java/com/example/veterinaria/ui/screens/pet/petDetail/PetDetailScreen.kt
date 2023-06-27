@@ -1,10 +1,15 @@
 package com.example.veterinaria.ui.screens.pet.petDetail
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.clickable
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,13 +22,17 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,13 +41,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.veterinaria.R
+import com.example.veterinaria.ui.components.ProgressBar
+import com.example.veterinaria.util.Constants
+import com.example.veterinaria.util.Response
+import com.example.veterinaria.viewmodel.ImageViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction6
@@ -47,22 +68,12 @@ import kotlin.reflect.KFunction6
 @Composable
 fun PetDetailScreen(
     state: PetDetailState,
-
-    //addNewPet: KFunction7<String, Int, String, String, String, String, String>,
     addNewPet: (String, Int,String,String, String, String, String) -> Unit,
-    updatePets: (String,Int,String,String,String,String) -> Unit
-//    addNewPet: (String, Int,String,String, String, String, String) -> Unit,
-//    addNewPet: KFunction4<String, Int, List<String>, String, Unit>,
-//    state3: UserDetailState,
-//    updateUserPets: KFunction1<List<String>, Unit>
-//    updateUserPets: (String)->Unit
-//    viewModel: ImageViewModel = hiltViewModel(),
+    updatePets: (String,Int,String,String,String,String) -> Unit,
+    viewModel2: ImageViewModel = hiltViewModel(),
 ) {
     var nombre by remember(state.pet?.name) { mutableStateOf(state.pet?.name ?: "") }
     var age by remember(state.pet?.age) { mutableStateOf(state.pet?.age ?: 0) }
-    //var species by remember { mutableStateOf(state.pet?.species ?: emptyList()) }
-    //var breed by remember(state.pet?.breed) { mutableStateOf(state.pet?.breed ?: emptyList()) }
-    //var species by remember(state.pet?.species) { mutableStateOf(state.pet?.species ?: "") }
     var breed by remember(state.pet?.breed) { mutableStateOf(state.pet?.breed ?: "") }
     var gender by remember(state.pet?.gender) { mutableStateOf(state.pet?.gender ?: "") }
     var photo by remember(state.pet?.photo) { mutableStateOf(state.pet?.photo ?: "") }
@@ -72,14 +83,22 @@ fun PetDetailScreen(
     var species by remember(state.pet?.species) { mutableStateOf(state.pet?.species ?: "") }
 
     var expanded by remember { mutableStateOf(false) } // Estado para controlar si el menú está expandido
-
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { imageUri ->
+        imageUri?.let {
+            viewModel2.addImageToStorange(imageUri)
+        }
+    }
+    val imageUrl by viewModel2.imageUrl.collectAsState()
+    var obtainedImageUrl by remember { mutableStateOf<String?>(null) }
     // Método para manejar la selección de una especie
     val onSpeciesSelected: (String) -> Unit = { selectedSpecies ->
         species = selectedSpecies
         expanded = false
     }
-    val breedOptions = listOf("Opción 1", "Opción 2", "Opción 3")
-    val genderOptions = listOf("Masculino", "Femenino", "Otro")
+    val breedOptions = listOf("Chihuahua", "Golden Retriever", "Rottweiler","Boxer","Pomerania")
+    val genderOptions = listOf("Masculino", "Femenino")
 
 
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -155,6 +174,23 @@ fun PetDetailScreen(
                     gender = selectedGender
                 }
             )
+
+            AbrirGaleria(
+                openGallery = {
+                    galleryLauncher.launch(Constants.ALL_IMAGES)
+                },
+                obtainedImageUrl
+            )
+            AddImageToStorage(
+                addImageToDatabase = { downloadUrl ->
+                    viewModel2.addImageToDatabase(downloadUrl)
+
+                },
+                onImageUrlObtained = { imageUrl ->
+                    obtainedImageUrl = imageUrl
+                }
+            )
+
             /*dropDownMenu(species) { selectedSpecies ->
                 species = selectedSpecies
             }*/
@@ -180,6 +216,8 @@ fun PetDetailScreen(
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter),
                     onClick = {
+
+
 
 
                         val photo = "https://firebasestorage.googleapis.com/v0/b/mascota002-3b966.appspot.com/" +
@@ -285,56 +323,103 @@ fun DropdownComponent(
     }
 }
 
-
-
-
 @Composable
-fun dropDownMenu(selectedItems: List<String>, onItemsSelected: (List<String>) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("Perro", "Gato", "Ave", "Otro")
+fun AbrirGaleria(
+    openGallery: () -> Unit,
+    imageUri: String?,
+) {
+    val hasPhoto = imageUri != null
+    val iconResource = if (hasPhoto) {
+        Icons.Filled.SwapHoriz
+    } else {
+        Icons.Filled.AddAPhoto
+    }
 
-    var selectedText by remember { mutableStateOf("") }
-
-    var textfieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val icon = if (expanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-    Column() {
-        OutlinedTextField(
-            value = selectedText,
-            onValueChange = { selectedText = it },
+    OutlinedButton(
+        onClick = {
+            openGallery()
+        },
+        shape = MaterialTheme.shapes.small,
+        contentPadding = PaddingValues()
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-                .onGloballyPositioned { coordinates ->
-                    //This value is used to assign to the DropDown the same width
-                    textfieldSize = coordinates.size.toSize()
-                },
-            label = { Text("Especie") },
-            trailingIcon = {
-                Icon(icon, "contentDescription",
-                    Modifier.clickable { expanded = !expanded })
-            }
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+                .padding(horizontal = 86.dp, vertical = 5.dp)
         ) {
-            suggestions.forEach { label ->
-                DropdownMenuItem(onClick = {
-                    selectedText = label
-                    expanded = false
-                    onItemsSelected(listOf(label))
-                }) {
-                    Text(text = label)
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    if (hasPhoto) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(imageUri)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        PhotoDefaultImage(modifier = Modifier.fillMaxSize())
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(vertical = 5.dp)
+                ) {
+                    Icon(imageVector = iconResource, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(
+                            id = if (hasPhoto) {
+                                R.string.retake_photo
+                            } else {
+                                R.string.add_photo
+                            }
+                        )
+                    )
                 }
             }
         }
-    }
 
+
+    }
+}
+
+@Composable
+private fun PhotoDefaultImage(
+    modifier: Modifier = Modifier,
+    lightTheme: Boolean = LocalContentColor.current.luminance() < 0.5f,
+) {
+    val assetId = if (lightTheme) {
+        R.drawable.ic_selfie_light
+    } else {
+        R.drawable.ic_selfie_dark
+    }
+    Image(
+        painter = painterResource(id = assetId),
+        modifier = modifier,
+        contentDescription = null
+    )
+}
+@Composable
+fun AddImageToStorage(
+    viewModel: ImageViewModel = hiltViewModel(),
+    addImageToDatabase: (downloadUrl: Uri) -> Unit,
+    onImageUrlObtained: (imageUrl: String?) -> Unit,
+) {
+    when (val addImageToStorageResponse = viewModel.addImageToStorangeResponse) {
+        is Response.Loading -> ProgressBar()
+        is Response.Sucess -> addImageToStorageResponse.data?.let { downloadUrl ->
+            LaunchedEffect(downloadUrl) {
+                addImageToDatabase(downloadUrl)
+                onImageUrlObtained(downloadUrl.toString())
+            }
+        }
+
+        is Response.Failure -> print(addImageToStorageResponse.e)
+    }
 }

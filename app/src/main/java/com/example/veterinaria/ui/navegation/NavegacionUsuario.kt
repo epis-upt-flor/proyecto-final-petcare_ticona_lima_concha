@@ -22,6 +22,7 @@ import com.example.veterinaria.ui.screens.vet.vetDetail.vetScreen
 import com.example.veterinaria.ui.screens.vet.vetMap
 import com.example.veterinaria.viewmodel.PetDetailViewModel
 import com.example.veterinaria.viewmodel.PetListViewModel
+import com.example.veterinaria.viewmodel.RequestViewModel
 import com.example.veterinaria.viewmodel.UserListViewModel
 import com.example.veterinaria.viewmodel.VetDetailViewModel
 import com.example.veterinaria.viewmodel.VetListViewModel
@@ -30,7 +31,7 @@ sealed class OpcionMenuInferior(val icono: ImageVector, val titulo: String, val 
     object HomeScreen : OpcionMenuInferior(Icons.Default.Home, "Home", "master")
     object MascotaScreen : OpcionMenuInferior(Icons.Default.Pets, "Mascota", "mascota")
     object MascotaDetalleScreen :
-        OpcionMenuInferior(Icons.Default.Details, "Detalle", "mascota_detalle_screen")
+        OpcionMenuInferior(Icons.Default.Details, "Profile", "mascota_detalle_screen")
 }
 
 sealed class OpcionMenuSuperior(val icono: ImageVector, val titulo: String, val ruta: String) {
@@ -46,7 +47,7 @@ sealed class OpcionMenuSuperior(val icono: ImageVector, val titulo: String, val 
     object Veterinaria : OpcionMenuSuperior(Icons.Default.Details, "Unete", "add_vet")
 
     object Home : OpcionMenuSuperior(Icons.Default.Home, "Home", "home")
-    object MisNotificaciones : OpcionMenuSuperior(Icons.Default.Alarm, "Mis Notificaciones", "notificaciones")
+    object MisNotificaciones : OpcionMenuSuperior(Icons.Default.Alarm, "Solicitudes", "notificaciones")
     object Telemedicina : OpcionMenuSuperior(Icons.Default.Phone, "Telemedicina", "telemedicina")
 }
 
@@ -81,7 +82,11 @@ fun NavegacionUsuario(
             val state = viewModel.state.value
             PetListScreen(state)*/
 
-            NavegationPet()
+            val viewModel: UserListViewModel = hiltViewModel()
+            val state = viewModel.state.value
+//            UserListScreen(state)
+
+            NavigationVeterinary()
         }
         composable(route= OpcionMenuSuperior.MisMascotasScreen.ruta){
             /*val viewModel: PetDetailViewModel = hiltViewModel()
@@ -110,9 +115,15 @@ fun NavegacionUsuario(
         composable(route = OpcionMenuSuperior.Veterinaria.ruta) {
             val viewModel: VetDetailViewModel = hiltViewModel()
             val state = viewModel.state.value
+
+            val viewModel2: RequestViewModel = hiltViewModel()
+            val state2 = viewModel2.state.value
+
             vetScreen(
                 state = state,
                 addNewVet = viewModel::addNewVet,
+                state5 = state2,
+                addRequest = viewModel2::addRequest,
                 ubicacionLiveData
             )
         }
@@ -146,6 +157,8 @@ fun NavegacionUsuario(
             val viewModel: UserListViewModel = hiltViewModel()
             val state = viewModel.state.value
             UserListScreen(state)
+
+            //NavigationVeterinary()
         }
     }
 }

@@ -8,5 +8,6 @@ data class Veterinary(
     val location: Location = Location(),
     val services: List<Service> = emptyList(),
     val emergency: List<Emergency> = emptyList(),
-    val veterinary_logo: String = ""
+    val veterinary_logo: String = "",
+    var state: String = "",
 )

@@ -1,17 +1,12 @@
 package com.example.veterinaria.ui.screens.vet.vetDetail
 
-import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,16 +14,11 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -56,8 +46,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.simulateHotReload
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,23 +65,26 @@ import coil.request.ImageRequest
 import com.example.veterinaria.R
 import com.example.veterinaria.data.model.Emergency
 import com.example.veterinaria.data.model.Location
+import com.example.veterinaria.data.model.RequestDetailState
 import com.example.veterinaria.data.model.Service
-import com.example.veterinaria.ui.MainActivity
 import com.example.veterinaria.ui.components.ProgressBar
 import com.example.veterinaria.ui.screens.emergencia.UbicacionLiveData
-import com.example.veterinaria.ui.theme.slightlyDeemphasizedAlpha
 import com.example.veterinaria.util.Constants
 import com.example.veterinaria.util.Response
 import com.example.veterinaria.viewmodel.EmergencyListViewModel
 import com.example.veterinaria.viewmodel.ImageViewModel
 import com.example.veterinaria.viewmodel.ServiceListViewModel
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
+import kotlin.reflect.KFunction7
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun vetScreen(
     state: VetDetailState,
-    addNewVet: (String, String,String, Location, List<Service>, List<Emergency>, String) -> Unit,
+    addNewVet: KFunction7<String, String, String, Location, List<Service>, List<Emergency>, String, String>,
+    state5: RequestDetailState,
+    addRequest: (String, String)-> Unit,
     ubicacionLiveData: UbicacionLiveData,
     viewModel2: ImageViewModel = hiltViewModel(),
 ) {
@@ -113,8 +106,12 @@ fun vetScreen(
             state.vet?.emergency ?: emptyList()
         )
     }
+    var vetId by remember { mutableStateOf("") }
+
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val userId56 = auth.currentUser?.uid
+
     val currentContext = LocalContext.current
-    // +++++++++++++++++++++++++++++++++++ Aggregation actual
     val ubicacionActual by ubicacionLiveData.observeAsState()
     val latitud = ubicacionActual?.latitude?.toDoubleOrNull() ?: 0.0
     val longitud = ubicacionActual?.longitude?.toDoubleOrNull() ?: 0.0
@@ -439,26 +436,27 @@ fun vetScreen(
                                         Button(
                                             onClick = {
                                                 showDialog = false
-                                                obtainedImageUrl?.let {
-                                                    addNewVet(
-                                                        nombre,
-                                                        telefono,
-                                                        address,
-                                                        Location(latitud, longitud),
-                                                        selectedServices,
-                                                        selectedAccident,
-                                                        it
-                                                    )
 
-                                                    currentContext.startActivity(
-                                                        Intent(
-                                                            currentContext,
-                                                            MainActivity::class.java
-                                                        )
+                                                vetId = addNewVet(
+                                                    nombre,
+                                                    telefono,
+                                                    address,
+                                                    Location(latitud, longitud),
+                                                    selectedServices,
+                                                    selectedAccident,
+                                                    obtainedImageUrl.toString()
+                                                ).toString()
+
+                                                /*currentContext.startActivity(
+                                                    Intent(
+                                                        currentContext,
+                                                        MainActivity::class.java
                                                     )
+                                                )*/
+                                                //}
+                                                if (userId56 != null) {
+                                                    addRequest(userId56,vetId)
                                                 }
-
-
                                             }
                                         ) {
                                             Text(text = "Aceptar")
@@ -501,53 +499,6 @@ fun AbrirGaleria(
         shape = MaterialTheme.shapes.small,
         contentPadding = PaddingValues()
     ) {
-        /*Column(
-            modifier = Modifier
-                .padding(horizontal = 86.dp, vertical = 74.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Row(modifier = Modifier
-                    .wrapContentSize(Alignment.BottomCenter)
-                    .padding(vertical = 26.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    if (hasPhoto) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(imageUri)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        PhotoDefaultImage(modifier = Modifier.fillMaxSize())
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .wrapContentSize(Alignment.BottomCenter)
-                        .padding(vertical = 26.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(imageVector = iconResource, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(
-                            id = if (hasPhoto) {
-                                R.string.retake_photo
-                            } else {
-                                R.string.add_photo
-                            }
-                        )
-                    )
-                }
-            }
-
-        }*/
-
         Column(
             modifier = Modifier
                 .padding(horizontal = 86.dp, vertical = 5.dp)

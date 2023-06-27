@@ -35,4 +35,44 @@ constructor(
             emit(Result.Error<List<Veterinary>>(message = e.localizedMessage ?: "Error Desconocido"))
         }
     }
+
+    fun getVeterinaryById(veterinaryId: String): Flow<Result<Veterinary>> = flow {
+        try {
+            emit(Result.Loading<Veterinary>())
+
+            val veterinary = vetList
+                .whereEqualTo("id", veterinaryId)
+                .get()
+                .await()
+                .toObjects(Veterinary::class.java)
+                .firstOrNull()
+            if (veterinary != null) {
+                emit(Result.Success<Veterinary>(data = veterinary))
+            } else {
+                emit(Result.Error<Veterinary>(message = "Veterinary not found"))
+            }
+        } catch (e: Exception) {
+            emit(Result.Error<Veterinary>(message = e.localizedMessage ?: "Unknown Error"))
+        }
+    }
+
+    fun updateVeterinary(veterinaryId: String, veterinary: Veterinary) {
+        try {
+            val map = mapOf(
+                "name" to veterinary.name,
+                "phone" to veterinary.phone,
+                "address" to veterinary.address,
+                "location" to veterinary.location,
+                "services" to veterinary.services,
+                "emergency" to veterinary.emergency,
+                "veterinary_logo" to veterinary.veterinary_logo,
+                "state" to veterinary.state
+            )
+            vetList.document(veterinaryId).update(map)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
 }
