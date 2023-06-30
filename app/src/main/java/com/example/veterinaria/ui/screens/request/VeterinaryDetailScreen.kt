@@ -1,4 +1,4 @@
-package com.example.veterinaria.ui.screens.vet
+package com.example.veterinaria.ui.screens.request
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,21 +21,34 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.veterinaria.R
+import com.example.veterinaria.data.model.Pet
 import com.example.veterinaria.data.model.Veterinary
+import com.example.veterinaria.ui.screens.pet.petList.GenderTag
 import com.example.veterinaria.ui.screens.vet.vetList.VetListState
+import com.example.veterinaria.ui.theme.blueBG
+import com.example.veterinaria.ui.theme.blueText
+import com.example.veterinaria.ui.theme.card
+
 
 @ExperimentalMaterialApi
 @Composable
@@ -44,7 +59,8 @@ fun VeterinaryList(
     onItemClick: (String) -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(blueBG),
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
@@ -58,63 +74,97 @@ fun VeterinaryList(
     }
 }
 
+
+
+
+
 @ExperimentalMaterialApi
 @Composable
 fun VeterinaryListItem(
     veterinary: Veterinary,
     onItemClick: (String) -> Unit,
 ) {
+
+
+
     Card(
-        elevation = 0.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
-            .clickable {
-                onItemClick(veterinary.id)
-            }
             .padding(8.dp)
-            .shadow(4.dp) // Aplica el sombreado al Card
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = { onItemClick(veterinary.id) }),
+        elevation = 0.dp,
+//        backgroundColor = MaterialTheme.colors.onSurface
+        backgroundColor = card
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-//                .background(Color.White)
-//                .clickable {
-//                    onItemClick(veterinary.id)
-//                }
+                .padding(16.dp)
         ) {
+
+            val image = veterinary.veterinary_logo
             Image(
-                painter = rememberImagePainter(veterinary.veterinary_logo),
+                modifier = Modifier
+                    .size(80.dp, 80.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                painter = rememberAsyncImagePainter(image),
+                alignment = Alignment.CenterStart,
                 contentDescription = "",
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .padding(8.dp)
+                contentScale = ContentScale.Crop
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
                     text = veterinary.name,
-                    color = Color.Black
+                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                    color = blueText,
+                    fontWeight = FontWeight.Bold,
+                    style = typography.subtitle1
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = buildString {
+                        append(veterinary.phone)
+                        append(" | ")
+                        append(veterinary.state)
+                    },
+                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                    color = blueText,
+                    style = typography.caption
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    VeterinaryStateTag(veterinary.state)
+                Row(verticalAlignment = Alignment.Bottom) {
+
+                    val location: Painter = painterResource(id = R.drawable.baseline_location_on_24)
+
+                    Icon(
+                        painter = location,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp, 16.dp),
+                        tint = Color.Red
+                    )
+
+                    Text(
+                        text = veterinary.address,
+                        modifier = Modifier.padding(8.dp, 12.dp, 12.dp, 0.dp),
+                        color = blueText,
+                        style = typography.caption
+                    )
                 }
-
-
-
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                VeterinaryStateTag(veterinary.state)
             }
         }
     }
+
 }
 @Composable
 fun VeterinaryStateTag(state: String) {

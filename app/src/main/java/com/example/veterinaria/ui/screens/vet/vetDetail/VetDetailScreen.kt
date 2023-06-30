@@ -1,5 +1,6 @@
 package com.example.veterinaria.ui.screens.vet.vetDetail
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CircularProgressIndicator
@@ -58,6 +60,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -70,9 +73,12 @@ import com.example.veterinaria.data.model.Emergency
 import com.example.veterinaria.data.model.Location
 import com.example.veterinaria.data.model.RequestDetailState
 import com.example.veterinaria.data.model.Service
+import com.example.veterinaria.ui.MainActivity
 import com.example.veterinaria.ui.components.ProgressBar
 import com.example.veterinaria.ui.screens.emergencia.UbicacionLiveData
 import com.example.veterinaria.ui.theme.DeepBlue
+import com.example.veterinaria.ui.theme.Purple500
+import com.example.veterinaria.ui.theme.TextWhite
 import com.example.veterinaria.util.Constants
 import com.example.veterinaria.util.Response
 import com.example.veterinaria.viewmodel.EmergencyListViewModel
@@ -140,7 +146,8 @@ fun vetScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(0.dp, 0.dp, 0.dp, 55.dp)
-            .background(DeepBlue),
+        //.background(DeepBlue)
+        ,
 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -155,12 +162,12 @@ fun vetScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                //.padding(horizontal = 16.dp)
+            //.padding(horizontal = 16.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    //.padding(horizontal = 16.dp)
+                //.padding(horizontal = 16.dp)
                 ,
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -172,26 +179,26 @@ fun vetScreen(
 
                         Column(
                             modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                //.background(DeepBlue)
+                                .weight(0.15f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
+                            Text(
+                                modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp)
-                                    .fillMaxSize()
-                                    .background(DeepBlue)
-                                    .weight(0.25f),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                //Text("Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.")
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 40.dp)
-                                        .padding(top = 20.dp),
-                                    text = "Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.",
-                                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                                    fontWeight = FontWeight.Medium,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
+                                    .padding(horizontal = 40.dp)
+                                    .padding(top = 20.dp),
+                                text = "Únete a nuestra red de veterinarias y llega a más usuarios, brindando cuidado y bienestar animal.",
+                                fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
 
 
 
@@ -199,8 +206,8 @@ fun vetScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
-                                .background(DeepBlue)
-                                .weight(0.50f),
+                                //.background(DeepBlue)
+                                .weight(0.40f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -229,8 +236,8 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
-                                .weight(0.25f),
+                                //.background(DeepBlue)
+                                .weight(0.45f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -239,8 +246,8 @@ fun vetScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp)
-                                    //.padding(top = 20.dp)
-                                         ,
+                                //.padding(top = 20.dp)
+                                ,
                                 text = "Completa tus datos correctamente y agrega una foto de tu veterinaria.",
                                 fontSize = MaterialTheme.typography.subtitle1.fontSize,
                                 fontWeight = FontWeight.Medium,
@@ -260,7 +267,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -283,7 +290,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.50f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -341,7 +348,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -357,7 +364,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -382,7 +389,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.50f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -437,7 +444,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -453,7 +460,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.15f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -477,7 +484,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.60f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -530,7 +537,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.15f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -547,7 +554,7 @@ fun vetScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .fillMaxSize()
-                                .background(DeepBlue)
+                                //.background(DeepBlue)
                                 .weight(0.25f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -559,7 +566,7 @@ fun vetScreen(
                                     .padding(horizontal = 40.dp)
                                 //.padding(top = 20.dp)
                                 ,
-                                text = "Agrega una Imagen",
+                                text = "Agrega una Imagen imagen o logo de tu veterinaria",
                                 fontSize = MaterialTheme.typography.subtitle1.fontSize,
                                 fontWeight = FontWeight.Medium,
                                 textAlign = TextAlign.Center
@@ -609,6 +616,7 @@ fun vetScreen(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp) // Espacio entre los botones y el borde inferior
             ) {
+
                 if (currentScreen != SurveyScreenState.SCREEN1) {
                     Button(
                         onClick = {
@@ -616,7 +624,11 @@ fun vetScreen(
                                     (currentScreen.ordinal + SurveyScreenState.values().size - 1) %
                                             SurveyScreenState.values().size
                             ]
-                        }
+                        },
+                        modifier = Modifier.weight(0.5f),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Purple500 // Cambiar el color de fondo del botón
+                        )
                     ) {
                         Text("Previous")
                     }
@@ -624,17 +636,23 @@ fun vetScreen(
 
                 if (currentScreen != SurveyScreenState.SCREEN5){
                     Button(
+
                         onClick = {
                             currentScreen = SurveyScreenState.values()[
                                     (currentScreen.ordinal + 1) % SurveyScreenState.values().size
                             ]
                         },
+
                         enabled = currentScreen != SurveyScreenState.SCREEN5,
                         modifier = if (currentScreen == SurveyScreenState.SCREEN1) {
                             Modifier.weight(1f)
                         } else {
-                            Modifier
-                        }
+                            Modifier.weight(0.5f)
+
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Purple500 // Cambiar el color de fondo del botón
+                        )
                     ) {
                         Text("Next")
                     }
@@ -643,8 +661,7 @@ fun vetScreen(
                     if (state.error.isNotBlank()) {
                         Text(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
+                                .fillMaxWidth(),
                             text = state.error,
                             style = TextStyle(
                                 color = Color.Red,
@@ -674,14 +691,14 @@ fun vetScreen(
                             var showDialog by remember { mutableStateOf(false) }
 
                             Button(
-                                modifier = Modifier,
+                                modifier = Modifier.weight(0.5f),
                                 onClick = { showDialog = true },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color.Red
                                 )
                             ) {
                                 Text(
-                                    text = "Agregar Veterinaria",
+                                    text = "Enviar Solicitud",
                                     color = Color.White
                                 )
                             }
@@ -690,7 +707,7 @@ fun vetScreen(
                                 AlertDialog(
                                     onDismissRequest = { showDialog = false },
                                     title = { Text(text = "Confirmación") },
-                                    text = { Text(text = "¿Estás seguro de que quieres agregar una veterinaria?") },
+                                    text = { Text(text = "¿Estás seguro de que quieres enviar una solicitud?") },
                                     confirmButton = {
                                         Button(
                                             onClick = {
@@ -706,17 +723,16 @@ fun vetScreen(
                                                     obtainedImageUrl.toString()
                                                 ).toString()
 
-                                                /*currentContext.startActivity(
+                                                if (userId56 != null) {
+                                                    addRequest(userId56,vetId)
+                                                }
+                                                currentContext.startActivity(
                                                     Intent(
                                                         currentContext,
                                                         MainActivity::class.java
                                                     )
-                                                )*/
-                                                //}
-                                                if (userId56 != null) {
-                                                    addRequest(userId56,vetId)
-                                                }
-                                            }
+                                                )
+                                            },Modifier.weight(1f)
                                         ) {
                                             Text(text = "Aceptar")
                                         }

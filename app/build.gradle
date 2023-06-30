@@ -122,4 +122,11 @@ dependencies {
     implementation group: 'com.google.accompanist', name: 'accompanist-pager', version: '0.31.2-alpha'
     implementation("com.google.accompanist:accompanist-pager:0.31.2-alpha")
 
+
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+
+    testImplementation 'junit:junit:4.+'
+    testImplementation "io.mockk:mockk:1.12.2"
+
 }

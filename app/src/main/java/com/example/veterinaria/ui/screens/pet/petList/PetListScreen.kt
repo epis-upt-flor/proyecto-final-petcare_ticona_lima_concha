@@ -61,6 +61,9 @@ import com.example.veterinaria.R
 import com.example.veterinaria.data.model.Pet
 import com.example.veterinaria.ui.theme.DarkerButtonBlue
 import com.example.veterinaria.ui.theme.DeepBlue
+import com.example.veterinaria.ui.theme.blueBG
+import com.example.veterinaria.ui.theme.blueText
+import com.example.veterinaria.ui.theme.card
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.firebase.auth.FirebaseAuth
@@ -78,6 +81,7 @@ fun PetListScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .background(blueBG)
             .padding(start = 0.dp, top = 0.dp, end = 0.dp, bottom = 50.dp),
 
         floatingActionButton = {
@@ -112,10 +116,9 @@ fun PetsList(
     val userId56 = auth.currentUser?.uid
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-//        backgroundColor = MaterialTheme.colors.background
+        modifier = Modifier.fillMaxSize().background(blueBG),
 
-    ) {
+        ) {
         //refrescar pantalla
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing),
@@ -186,7 +189,7 @@ fun PetsList(
                             // TODO("DELETE BOOK")
                         } else {
                             //PetListItem(pet, onItemClick = onItemClick)
-                            ItemDogCard(pet, onItemClicked = onItemClick)
+                            ItemCard(pet, onItemClicked = onItemClick)
                         }
                     }
                 }
@@ -201,16 +204,17 @@ fun PetsList(
 
 @SuppressLint("ResourceType")
 @Composable
-fun ItemDogCard(pet: Pet, onItemClicked: (String) -> Unit) {
+fun ItemCard(pet: Pet, onItemClicked: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+//            .background(card)
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = { onItemClicked(pet.id) }),
         elevation = 0.dp,
 //        backgroundColor = MaterialTheme.colors.onSurface
-        backgroundColor = MaterialTheme.colors.onSurface
+        backgroundColor = card
     ) {
         Row(
             modifier = Modifier
@@ -235,7 +239,7 @@ fun ItemDogCard(pet: Pet, onItemClicked: (String) -> Unit) {
                 Text(
                     text = pet.name,
                     modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                    color = MaterialTheme.colors.surface,
+                    color = blueText,
                     fontWeight = FontWeight.Bold,
                     style = typography.subtitle1
                 )
@@ -248,7 +252,7 @@ fun ItemDogCard(pet: Pet, onItemClicked: (String) -> Unit) {
                         append(pet.gender)
                     },
                     modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                    color = MaterialTheme.colors.surface,
+                    color = blueText,
                     style = typography.caption
                 )
 
@@ -266,7 +270,7 @@ fun ItemDogCard(pet: Pet, onItemClicked: (String) -> Unit) {
                     Text(
                         text = pet.breed,
                         modifier = Modifier.padding(8.dp, 12.dp, 12.dp, 0.dp),
-                        color = MaterialTheme.colors.surface,
+                        color = blueText,
                         style = typography.caption
                     )
                 }
