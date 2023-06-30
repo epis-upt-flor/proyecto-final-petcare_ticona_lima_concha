@@ -9,8 +9,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.veterinaria.ui.screens.vet.VeterinaryDetailScreen
-import com.example.veterinaria.ui.screens.vet.VeterinaryListScreen
+import com.example.veterinaria.ui.screens.request.VeterinaryListScreen
+import com.example.veterinaria.ui.screens.vet.vetList.VeterinaryDetailScreen
 import com.example.veterinaria.viewmodel.VetDetailViewModel
 import com.example.veterinaria.viewmodel.VetListViewModel
 

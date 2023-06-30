@@ -1,56 +1,59 @@
 package com.example.veterinaria.ui.screens.home
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import com.example.veterinaria.R
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
+import com.example.veterinaria.R
 import com.example.veterinaria.data.model.Pet
 import com.example.veterinaria.data.model.User
-import com.example.veterinaria.ui.navegation.DestinationPet
 import com.example.veterinaria.ui.screens.pet.petList.PetListState
 import com.example.veterinaria.ui.screens.user.UserListState
-import com.example.veterinaria.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
-@ExperimentalLayoutApi
 @Composable
 fun HomeScreen(
     state: UserListState,
@@ -68,369 +71,238 @@ fun HomeScreen(
         pet.ownerId == userId56
     }
 
-    Box(
-        modifier = Modifier
-            .background(DeepBlue)
-            .fillMaxSize()
-    ) {
+    Box(Modifier.verticalScroll(rememberScrollState())) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, (-30).dp),
+            painter = painterResource(id = R.drawable.bg_main),
+            contentDescription = "Header Background",
+            contentScale = ContentScale.FillWidth
+        )
         Column {
-            GreetingSection(filteredUserList)
-            //ChipSection(chips = listOf("Notificaciones", "Eventos", "Depression"))
+            AppBar(filteredUserList)
+            Content(filteredPetList)
+        }
+    }
+}
+
+@Composable
+fun AppBar(filteredUserList: List<User>) {
+    Row(
+        Modifier
+            .padding(16.dp,2.dp,16.dp,2.dp)
+            .height(250.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        TextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = "Search ", fontSize = 12.sp) },
+            singleLine = true,
+            leadingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search") },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
+
+        val usernames = filteredUserList.joinToString(", ") { users ->
+            users.username
+        }
+        Column(){
             Text(
-                text = "Mis Mascotas",
+                text = "Bienvenido . $usernames",
                 style = MaterialTheme.typography.h1,
                 modifier = Modifier.padding(15.dp)
             )
-            CurrentMeditation(filteredPetList)
-            FeatureSection(
-                features = listOf(
-                    Feature(
-                        title = "Historial",
-                        R.drawable.ic_headphone,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                    Feature(
-                        title = "Pruebas",
-                        R.drawable.ic_videocam,
-                        LightGreen1,
-                        LightGreen2,
-                        LightGreen3
-                    ),
-                    Feature(
-                        title = "Tratamientos",
-                        R.drawable.ic_music,
-                        OrangeYellow1,
-                        OrangeYellow2,
-                        OrangeYellow3
-                    ),
-                    Feature(
-                        title = "Ayuda",
-                        R.drawable.ic_headphone,
-                        Beige1,
-                        Beige2,
-                        Beige3
-                    )
-                )
-            )
-        }
-    }
-}
-
-
-@Composable
-fun GreetingSection(
-    //name: String = "Pedro"
-    filteredUserList: List<User>,
-) {
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
-//            Text(
-//                text = "Buen día, $name",
-//                style = MaterialTheme.typography.h2
-//            )
-
-//            filteredUserList.forEach { users ->
-//                users.username
-//            }
-
-//            filteredUserList.forEach { users ->
-//                Text(
-//                    text = "Buen día, ${users.username}",
-//                    style = MaterialTheme.typography.h2
-//                )
-//            }
-            val usernames = filteredUserList.joinToString(", ") { users ->
-                users.username
-            }
-            Text(
-                text = "Bienvenido $usernames",
-                style = MaterialTheme.typography.body1
-            )
-
             Text(
                 text = "¡Deseamos que tengas un buen día!",
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier.padding(15.dp)
             )
         }
-        Icon(
-            painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = "Search",
-            tint = Color.White,
-            modifier = Modifier.size(24.dp)
-        )
     }
 }
 
 @Composable
-fun ChipSection(
-    chips: List<String>,
+fun Content(filteredPetList: List<Pet>) {
+    Column() {
+        CategorySection(filteredPetList)
+        Spacer(modifier = Modifier.height(16.dp))
+        BestSellerSection()
+    }
+}
+
+
+
+@Composable
+fun PromotionItem(
+    title: String = "",
+    subtitle: String = "",
+    header: String = "",
+    backgroundColor: Color = Color.Transparent,
+    imagePainter: Painter
 ) {
-    var selectedChipIndex by remember {
-        mutableStateOf(0)
-    }
-    LazyRow {
-        items(chips.size) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
-                    .clickable {
-                        selectedChipIndex = it
-                    }
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        if (selectedChipIndex == it) ButtonBlue
-                        else DarkerButtonBlue
-                    )
-                    .padding(15.dp)
+    Card(
+        Modifier.width(300.dp),
+        shape = RoundedCornerShape(8.dp),
+        backgroundColor = backgroundColor,
+        elevation = 0.dp
+    ) {
+        Row {
+            Column(
+                Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = chips[it], color = TextWhite)
+                Text(text = title, fontSize = 14.sp, color = Color.White)
+                Text(text = subtitle, fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(text = header, fontSize = 28.sp, color = Color.White, fontWeight = FontWeight.Bold)
             }
+            Image(
+                painter = imagePainter, contentDescription = "",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                alignment = Alignment.CenterEnd,
+                contentScale = ContentScale.Crop
+            )
         }
-
-
-
     }
 }
 
 @Composable
-fun CurrentMeditation(
-    //color: Color = LightRed,
+fun CategorySection(
     filteredPetList: List<Pet>,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .padding(15.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(LightRed)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
-    ) {
-        filteredPetList.forEach { pet ->
-            /*Box(
-                //contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(ButtonBlue)
-                    .padding(10.dp)
-            ) {
-                val imageUrl = pet.photo
-                Image(
-                    painter = rememberImagePainter(imageUrl),
-                    contentDescription = "Mascota seleccionada"
-                )
-            }*/
-
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(ButtonBlue)
-            ) {
-                val imageUrl = pet.photo
-                Image(
-                    painter = rememberImagePainter(imageUrl),
-                    contentDescription = "Mascota seleccionada",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-
-
-        }
-        val navController = rememberNavController()
-        Box(
-            //contentAlignment = Alignment.Center,
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(ButtonBlue)
-                .padding(10.dp).clickable{
-                    /*navController.navigate(
-                        "${DestinationPet.PetDetail.route}/{petId}?petId=<valor_del_id>"
-                    )*/
-
-                   // navController.navigate(DestinationPet.PetList.route)
-                }
+    Column(Modifier.padding(horizontal = 16.dp)) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
-            )
+            Text(text = "Mascotas", style = MaterialTheme.typography.h6)
+            TextButton(onClick = {}) {
+                Text(text = "More", color = MaterialTheme.colors.primary)
+            }
         }
-
-
-    }
-
-    /*
 
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(15.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(color)
-                .padding(horizontal = 15.dp, vertical = 20.dp)
-                .fillMaxWidth()
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Box(
-                //contentAlignment = Alignment.Center,
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(ButtonBlue)
-                    .padding(10.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_play),
-                    contentDescription = "Play",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
+            filteredPetList.forEach { pet ->
+                val imageUrl = pet.photo
+                CategoryButton(
+                    text = "${pet.name}",
+                    icon = rememberAsyncImagePainter(imageUrl),
+                    backgroundColor = Color(0xffFFFBF3)
                 )
-            }
-
-        }
-     */
-
-
-}
-
-
-@Composable
-fun FeatureSection(features: List<Feature>) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = "Servicios",
-            style = MaterialTheme.typography.h1,
-            modifier = Modifier.padding(15.dp)
-        )
-        LazyVerticalGrid(
-
-            GridCells.Fixed(2),
-            contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            items(features.size) {
-                FeatureItem(feature = features[it])
+                Spacer(modifier = Modifier.padding(horizontal = 3.dp))
             }
         }
     }
 }
 
 @Composable
-fun FeatureItem(
-    feature: Feature,
+fun CategoryButton(
+    text: String = "",
+    icon: Painter,
+    backgroundColor: Color
 ) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .padding(7.5.dp)
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(10.dp))
-            .background(feature.darkColor)
+    Column(
+        Modifier
+            .width(72.dp)
+            .clickable { }
     ) {
-        val width = constraints.maxWidth
-        val height = constraints.maxHeight
-
-
-        // Medium colored path
-        val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-        val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-        val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-        val mediumColoredPoint5 = Offset(width * 1.4f, -height.toFloat())
-
-        val mediumColoredPath = Path().apply {
-            moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-            standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-            standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-            standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-            standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
-            lineTo(-100f, height.toFloat() + 100f)
-            close()
-        }
-
-        // Light colored path
-        val lightPoint1 = Offset(0f, height * 0.35f)
-        val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-        val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-        val lightPoint4 = Offset(width * 0.65f, height.toFloat())
-        val lightPoint5 = Offset(width * 1.4f, -height.toFloat() / 3f)
-
-        val lightColoredPath = Path().apply {
-            moveTo(lightPoint1.x, lightPoint1.y)
-            standardQuadFromTo(lightPoint1, lightPoint2)
-            standardQuadFromTo(lightPoint2, lightPoint3)
-            standardQuadFromTo(lightPoint3, lightPoint4)
-            standardQuadFromTo(lightPoint4, lightPoint5)
-            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
-            lineTo(-100f, height.toFloat() + 100f)
-            close()
-        }
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            drawPath(
-                path = mediumColoredPath,
-                color = feature.mediumColor
-            )
-            drawPath(
-                path = lightColoredPath,
-                color = feature.lightColor
-            )
-        }
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(15.dp)
+            Modifier
+                .size(72.dp)
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(18.dp)
         ) {
-            Text(
-                text = feature.title,
-                style = MaterialTheme.typography.h2,
-                lineHeight = 26.sp,
-                modifier = Modifier.align(Alignment.TopStart)
-            )
-            Icon(
-                painter = painterResource(id = feature.iconId),
-                contentDescription = feature.title,
-                tint = Color.White,
-                modifier = Modifier.align(Alignment.BottomStart)
-            )
-            Text(
-                text = "Start",
-                color = TextWhite,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+            Image(painter = icon, contentDescription = "", modifier = Modifier.fillMaxSize())
+        }
+        Text(text = text, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, fontSize = 12.sp)
+    }
+}
+
+@Composable
+fun BestSellerSection() {
+    Column() {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Notificaciones", style = MaterialTheme.typography.h6)
+            TextButton(onClick = {}) {
+                Text(text = "More", color = MaterialTheme.colors.primary)
+            }
+        }
+
+        //BestSellerItems()
+    }
+}
+
+
+@Composable
+fun BestSellerItem(
+    title: String = "",
+    price: String = "",
+    discountPercent: Int = 0,
+    imagePainter: Painter
+) {
+    Card(
+        Modifier
+            .width(160.dp)
+    ) {
+        Column(
+            Modifier
+                .padding(bottom = 32.dp)
+        ) {
+            Image(
+                painter = imagePainter, contentDescription = "",
                 modifier = Modifier
-                    .clickable {
-                        // Handle the click
-                    }
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(ButtonBlue)
-                    .padding(vertical = 6.dp, horizontal = 15.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Fit
             )
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(text = title, fontWeight = FontWeight.Bold)
+                Row {
+                    Text(
+                        "$${price}",
+                        textDecoration = if (discountPercent > 0)
+                            TextDecoration.LineThrough
+                        else
+                            TextDecoration.None,
+                        color = if (discountPercent > 0) Color.Gray else Color.Black
+                    )
+                    if (discountPercent > 0) {
+                        Text(text = "[$discountPercent%]", color = MaterialTheme.colors.primary)
+                    }
+                }
+            }
         }
     }
 }
