@@ -1,5 +1,7 @@
 package com.example.veterinaria.ui.screens.home
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,12 +19,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import com.example.veterinaria.data.model.Veterinary
@@ -72,36 +78,39 @@ fun VeterinariaListItem(veterinaria: Veterinary, ubicacionActual: DetallesUbicac
     Card(
         modifier = Modifier
             .padding(
-                horizontal = 8.dp, vertical = 8.dp
+                horizontal = 8.dp, vertical = 4.dp
             )
             .fillMaxWidth(),
         elevation = 2.dp,
         shape = RoundedCornerShape(corner = CornerSize(16.dp))
     ) {
-        Row(Modifier.clickable { }) {
+        val context = LocalContext.current
+        Row(modifier = Modifier.fillMaxWidth()) {
             VeterinariaImage(veterinaria)
             Column(modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .align(Alignment.CenterVertically)
+                .padding(4.dp)
             ) {
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(text = veterinaria.name, style = typography.h6)
-                    Text(text = veterinaria.phone, style = typography.caption, color = Color.Green)
-                }
-                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = veterinaria.name, style = typography.caption)
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = veterinaria.address,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
                     style = typography.caption
                 )
-                ubicacionActual?.let{
-                    var miUbicacion = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
-                    var distanciaEsferica = miUbicacion.sphericalDistance(veterinaria.location.toLatLng())
-                    var distanciaEsfericaRedondeada = (distanciaEsferica * 100.0).roundToInt() / 100.0
-                    Text(text = "Distancia: $distanciaEsfericaRedondeada m")
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = "Distancia: ${veterinaria.distanciaEsfericaRedondeada} m")
+                    Row(){
+                        Text(text = veterinaria.phone, style = typography.caption, color = Color.Green)
+                        Icon(
+                            imageVector = Icons.Default.Call,
+                            contentDescription = "Llamar",
+                            modifier = Modifier.size(13.dp).clickable {
+                                val dialIntent = Intent(Intent.ACTION_DIAL)
+                                dialIntent.data = Uri.parse("tel:" + veterinaria.phone)
+                                context.startActivity(dialIntent)
+                            })
+                    }
                 }
             }
         }
@@ -115,7 +124,7 @@ private fun VeterinariaImage(veterinaria: Veterinary){
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .padding(2.dp)
-            .size(100.dp)
+            .size(50.dp)
             .clip(RoundedCornerShape(corner = CornerSize(8.dp)))
     )
 }

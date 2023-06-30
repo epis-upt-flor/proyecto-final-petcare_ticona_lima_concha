@@ -33,6 +33,8 @@ import com.example.veterinaria.viewmodel.VetListViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import com.google.maps.android.ktx.utils.sphericalDistance
+import kotlin.math.roundToInt
 
 @Composable
 fun EmergenciaMapScreen(
@@ -42,9 +44,9 @@ fun EmergenciaMapScreen(
 ) {
     val viewModel: VetListViewModel = hiltViewModel()
     val state = viewModel.state.value
-    val veterinariasDisponibles = LocalesQueAtiendenEmergencia(codigoEmergencia, state)
     Column(){
         val ubicacionActual by ubicacionLiveData.observeAsState()
+        val veterinariasDisponibles = LocalesQueAtiendenEmergencia(codigoEmergencia, state, ubicacionActual)
         Card(modifier = Modifier.padding(8.dp)){
             Column(){
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
@@ -112,17 +114,26 @@ private fun estaPermitidaLaUbicacion(context: Context): Boolean {
     return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
-private fun LocalesQueAtiendenEmergencia(codigoEmergencia: String?, state: VetListState): List<Veterinary> {
+private fun LocalesQueAtiendenEmergencia(
+    codigoEmergencia: String?,
+    state: VetListState,
+    ubicacionActual: DetallesUbicacion?
+): List<Veterinary> {
 
     val locales = state.vet.toList()
     var localesDisponibles = mutableListOf<Veterinary>()
     codigoEmergencia?.let {
         for (veterinaria: Veterinary in locales) {
             if(veterinaria.services.any{ it.codigoEmergencia == codigoEmergencia }) {
+                ubicacionActual?.let{
+                    var miUbicacion = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
+                    var distanciaEsferica = miUbicacion.sphericalDistance(veterinaria.location.toLatLng())
+                    var distanciaEsfericaRedondeada = (distanciaEsferica * 100.0).roundToInt() / 100.0
+                    veterinaria.distanciaEsfericaRedondeada = distanciaEsfericaRedondeada;
+                }
                 localesDisponibles.add(veterinaria)
             }
         }
     }
-    return localesDisponibles
+    return localesDisponibles.sortedWith(compareBy { it.distanciaEsfericaRedondeada })
 }
-

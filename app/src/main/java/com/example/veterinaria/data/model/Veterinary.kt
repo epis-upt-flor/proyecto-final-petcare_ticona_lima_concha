@@ -10,4 +10,5 @@ data class Veterinary(
     val emergency: List<Emergency> = emptyList(),
     val veterinary_logo: String = "",
     var state: String = "",
+    var distanciaEsfericaRedondeada: Double = 0.0
 )
