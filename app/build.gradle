@@ -69,63 +69,47 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.3.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
-
     //implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation 'com.google.firebase:firebase-auth:20.5.0'
-
     //Dependencia para imágenes de internet
     implementation("io.coil-kt:coil-compose:2.0.0-rc02")
-
     //Dependencias para Google Maps
     implementation 'com.google.maps.android:maps-compose:2.11.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
     implementation 'com.google.maps.android:maps-utils-ktx:3.2.0'
-
     //Dependencia para Carrusel de Imagenes
     implementation 'com.google.accompanist:accompanist-pager:0.22.0-rc'
-
     //Hilt
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     implementation 'androidx.hilt:hilt-navigation:1.1.0-alpha01'
-
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
-
     //Hill
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-
     //    VIEW MODEL
     //implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
-
     //Navegation
     implementation("androidx.navigation:navigation-compose:2.5.3")
     //swiperefresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.18.0")
-
     //Firebase
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
-
     //LiveData
     implementation("androidx.compose.runtime:runtime-livedata:1.4.1")
-
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
-
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation group: 'com.google.accompanist', name: 'accompanist-pager', version: '0.31.2-alpha'
     implementation("com.google.accompanist:accompanist-pager:0.31.2-alpha")
-
-
     testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-
     testImplementation 'junit:junit:4.+'
     testImplementation "io.mockk:mockk:1.12.2"
 
