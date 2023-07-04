@@ -44,7 +44,16 @@ Para compilar y ejecutar el proyecto localmente, sigue estos pasos:
 
        // Dependencias de Firestore y Storage
        implementation "com.google.firebase:firebase-firestore:$firebase_version"
-       implementation "com.google.firebase:firebase-storage:$firebase_version"
+       implementation "com.google.firebase:firebase-storage-ktx:$firebase_version"
+       implementation "com.google.firebase:firebase-auth-ktx"
+       implementation "com.google.firebase:firebase-firestore-ktx"
+
+       //Dependencias para Google Maps
+       implementation "com.google.maps.android:maps-compose:$maps_version"
+       implementation "com.google.android.gms:play-services-maps:$maps_version"
+       implementation "com.google.android.gms:play-services-location:$maps_version"
+       implementation "com.google.maps.android:android-maps-utils:$maps_version"
+       implementation "com.google.maps.android:maps-utils-ktx:$maps_version"
 
        // Otras dependencias...
    }
