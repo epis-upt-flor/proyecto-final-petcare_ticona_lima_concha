@@ -13,8 +13,6 @@ La función principal de Pet Care Locator es proporcionar a los usuarios la ubic
 
 ## Capturas de pantalla
 
-_Puedes incluir capturas de pantalla de tu aplicación aquí._
-
 | Home | Pet | Location |
 | :------: | :------: | :------: |
 | ![Descripción de la imagen](screenshots/home.jpg) | ![Descripción de la imagen](screenshots/pet.jpg) | ![Descripción de la imagen](screenshots/map_vet.jpg) |
